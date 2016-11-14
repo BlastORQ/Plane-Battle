@@ -1,33 +1,215 @@
 package ua.pp.blastorq.planebattle;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+//TODO зробити перевірку зьеднання з інтернетом (на андроїді)
+//TODO зробити плавний перехід між екраном літачка
+//TODO зробити синхронний мультиплеєр
+//TODO зробити хп
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.utils.*;
+import com.badlogic.gdx.utils.viewport.*;
+import org.json.*;
+import java.util.HashMap;
+import io.socket.client.*;
+import io.socket.emitter.*;
+import ua.pp.blastorq.planebattle.actors.*;
+import ua.pp.blastorq.planebattle.sprite.Plane;
 
-public class PlaneBattle extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
+public class PlaneBattle extends Game {
+	private Plane player;
+	private Left LeftButton;
+	private boolean isLeft = false, isRight = false;
+	private SpriteBatch batch;
+	private Stage stage;
+	private Socket socket;
+	private String id;
+	private Right RightButton;
+	private  Texture playerShip, friendlyShip;
+
+	private HashMap<String, Plane> friendlyPlayers;
 	@Override
-	public void create () {
+	public void create() {
+		Texture right = new Texture(Gdx.files.internal("right.png"));
+		Texture left = new Texture("left.png");
+		Viewport viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		stage = new Stage(viewport);
+		RightButton = new Right(right);
+		LeftButton = new Left(left);
+		stage.addActor(LeftButton);
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		playerShip = new Texture("Plane.png");
+		friendlyShip = new Texture("Plane1.png");
+		friendlyPlayers = new HashMap<String, Plane>();
+		connectSocket();
+		configSocketEvents();
+		stage.addActor(RightButton);
+		stage.addActor(LeftButton);
+		Gdx.input.setInputProcessor(stage);
+	}
+
+
+	private void handleInput(final float dt){
+		if(player != null) {
+			if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || isLeft) {
+				player.setPosition(player.getX() + (-200 * dt), player.getY());
+			} else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) || isRight){
+				player.setPosition(player.getX() + (+200 * dt), player.getY());
+			}else if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+				player.setPosition(player.getX(), player.getY() + (200* dt));
+			}else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+				player.setPosition(player.getX(), player.getY() - 200*dt);
+			}
+			if(player.getX() <0){
+				player.setPosition(Gdx.graphics.getWidth() - player.getWidth(), player.getY());
+			}
+		}
+	}
+	@Override
+	public void render() {
+		Gdx.gl.glClearColor(1, 1, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		handleInput(Gdx.graphics.getDeltaTime());
+		Listeners();
+		batch.begin();
+		drawPlayer();
+		drawAllPlayers();
+		batch.end();
+		drawStage();
+	}
+	private void Listeners(){
+		RightButton.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				isRight = true;
+				return super.touchDown(event, x, y, pointer, button);
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				isRight = false;
+				super.touchUp(event, x, y, pointer, button);
+			}
+		});
+		LeftButton.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				isLeft = true;
+				return super.touchDown(event, x, y, pointer, button);
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				isLeft = false;
+				super.touchUp(event, x, y, pointer, button);
+			}
+		});
+	}
+	private void drawStage(){
+		stage.draw();
+		stage.act(Gdx.graphics.getDeltaTime());
+	}
+	private void drawPlayer(){
+		if (player != null) {
+			player.draw(batch);
+		}
+	}
+	private void drawAllPlayers(){
+		for(HashMap.Entry<String, Plane> entry : friendlyPlayers.entrySet()){
+			entry.getValue().draw(batch);
+		}
+	}
+	@Override
+	public void pause() {
 	}
 
 	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+	public void resize(int width, int height) {
 	}
-	
+
 	@Override
-	public void dispose () {
-		batch.dispose();
-		img.dispose();
+	public void resume() {
+	}
+
+	@Override
+	public void dispose() {
+
+	}
+
+	private void connectSocket(){
+		try {
+			socket = IO.socket("http://137.74.223.147:8080");
+			socket.connect();
+		}catch(Exception e){
+			Gdx.app.log("NO", "");
+
+
+		}
+	}
+
+	private void configSocketEvents(){
+		try{
+			socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+				@Override
+				public void call(Object... args) {
+					Gdx.app.log("SocketIO", "Connected");
+					player = new Plane(playerShip);
+				}
+			}).on("socketID", new Emitter.Listener() {
+				@Override
+				public void call(Object... args) {
+					JSONObject data = (JSONObject) args[0];
+					try {
+						id = data.getString("id");
+						Gdx.app.log("SocketIO", "My ID: " + id);
+					} catch (JSONException e) {
+						Gdx.app.log("SocketIO", "Error getting ID");
+					}
+				}
+			}).on("newPlayer", new Emitter.Listener() {
+				@Override
+				public void call(Object... args) {
+					JSONObject data = (JSONObject) args[0];
+					try {
+						id = data.getString("id");
+						Gdx.app.log("SocketIO", "New Player Connect: " + id);
+						friendlyPlayers.put(id, new Plane(friendlyShip));
+					} catch (JSONException e) {
+						Gdx.app.log("SocketIO", "Error getting New PlayerID");
+					}
+				}
+			}).on("playerDisconnected", new Emitter.Listener() {
+				@Override
+				public void call(Object... args) {
+					JSONObject data = (JSONObject) args[0];
+					try {
+						id = data.getString("id");
+						friendlyPlayers.remove(id);
+					} catch (JSONException e) {
+						Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
+					}
+				}
+			}).on("getPlayers", new Emitter.Listener() {
+				@Override
+				public void call(Object... args) {
+					JSONArray objects = (JSONArray) args[0];
+					try {
+						for (int i = 0; i < objects.length(); i++) {
+							Plane coopPlayer = new Plane(friendlyShip);
+							Vector2 position = new Vector2();
+							position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
+							position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
+							coopPlayer.setPosition(position.x, position.y);
+							friendlyPlayers.put(objects.getJSONObject(i).getString("id"), coopPlayer);
+						}
+					} catch (JSONException e) {
+							Gdx.app.log("" + e.getMessage(), "");
+					}
+				}
+			}); }catch(Exception e) {
+			Gdx.app.log("NO CONFIG EVENT", "");
+		}
 	}
 }
