@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.*;
 
 public class TeamChoose implements Screen {
-    BitmapFont font;
-    SpriteBatch  batch;
-    Texture blue, red;
-    public TeamChoose() {
+   private BitmapFont font;
+   private SpriteBatch  batch;
+   private Texture blue;
+   public TeamChoose() {
         font = new BitmapFont(Gdx.files.internal("font/font.fnt") ,false);
         batch = new SpriteBatch();
         blue = new Texture("blue.png");
