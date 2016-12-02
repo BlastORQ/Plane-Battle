@@ -11,13 +11,13 @@ public class Right extends Actor {
 
     public Right(Texture right) {
         this.right = right;
-        setBounds(Gdx.graphics.getWidth() - 128, 0, 128, 128);
+        setBounds(Gdx.graphics.getWidth() - 64, 0, 64, 64);
     }
 
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(right, Gdx.graphics.getWidth() - 128, 0, 128, 128);
+        batch.draw(right, Gdx.graphics.getWidth() - 64, 0, 64, 64);
 
         super.draw(batch, parentAlpha);
     }
