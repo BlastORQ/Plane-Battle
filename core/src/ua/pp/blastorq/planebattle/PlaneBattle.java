@@ -19,6 +19,8 @@ import ua.pp.blastorq.planebattle.actors.*;
 import ua.pp.blastorq.planebattle.sprite.Plane;
 
 public class PlaneBattle extends Game {
+	private final float UPDATE_TIME = 1/60f;
+	float timer;
 	private Plane player;
 	private Left LeftButton;
 	private boolean isLeft = false, isRight = false;
@@ -38,6 +40,7 @@ public class PlaneBattle extends Game {
 		stage = new Stage(viewport);
 		RightButton = new Right(right);
 		LeftButton = new Left(left);
+		Listeners();
 		stage.addActor(LeftButton);
 		batch = new SpriteBatch();
 		playerShip = new Texture("Plane.png");
@@ -64,6 +67,21 @@ public class PlaneBattle extends Game {
 			}
 			if(player.getX() <0){
 				player.setPosition(Gdx.graphics.getWidth() - player.getWidth(), player.getY());
+			}else if(player.getX() + playerShip.getWidth()> Gdx.graphics.getWidth()){
+				player.setPosition(0, 64);
+			}
+		}
+	}
+	private void updateServer(float dt){
+		timer += dt;
+		if(timer >= UPDATE_TIME && player !=null && player.hasMoved()){
+			JSONObject data = new JSONObject();
+			try {
+				data.put("x", player.getX());
+				data.put("y", player.getY());
+				socket.emit("playerMoved", data);
+			}catch (JSONException e){
+				Gdx.app.log("SOCKET IO", "Error sending update data");
 			}
 		}
 	}
@@ -72,7 +90,7 @@ public class PlaneBattle extends Game {
 		Gdx.gl.glClearColor(1, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		handleInput(Gdx.graphics.getDeltaTime());
-		Listeners();
+		updateServer(Gdx.graphics.getDeltaTime());
 		batch.begin();
 		drawPlayer();
 		drawAllPlayers();
@@ -140,7 +158,7 @@ public class PlaneBattle extends Game {
 
 	private void connectSocket(){
 		try {
-			socket = IO.socket("http://137.74.223.147:8080");
+			socket = IO.socket("http://195.133.147.164:8080");
 			socket.connect();
 		}catch(Exception e){
 			Gdx.app.log("NO", "");
@@ -173,9 +191,9 @@ public class PlaneBattle extends Game {
 				public void call(Object... args) {
 					JSONObject data = (JSONObject) args[0];
 					try {
-						id = data.getString("id");
-						Gdx.app.log("SocketIO", "New Player Connect: " + id);
-						friendlyPlayers.put(id, new Plane(friendlyShip));
+						String playerId = data.getString("id");
+						Gdx.app.log("SocketIO", "New Player Connect: " + playerId);
+						friendlyPlayers.put(playerId, new Plane(friendlyShip));
 					} catch (JSONException e) {
 						Gdx.app.log("SocketIO", "Error getting New PlayerID");
 					}
@@ -187,6 +205,21 @@ public class PlaneBattle extends Game {
 					try {
 						id = data.getString("id");
 						friendlyPlayers.remove(id);
+					} catch (JSONException e) {
+						Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
+					}
+				}
+			}).on("playerMoved", new Emitter.Listener() {
+				@Override
+				public void call(Object... args) {
+					JSONObject data = (JSONObject) args[0];
+					try {
+						String playerId = data.getString("id");
+						Double x = data.getDouble("x");
+						Double y = data.getDouble("y");
+						if(friendlyPlayers.get(playerId) !=null){
+							friendlyPlayers.get(playerId).setPosition(x.floatValue(), y.floatValue());
+						}
 					} catch (JSONException e) {
 						Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
 					}
