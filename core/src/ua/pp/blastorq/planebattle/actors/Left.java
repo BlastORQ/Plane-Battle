@@ -9,7 +9,7 @@ public class Left extends Actor {
     public Left(Texture left) {
         this.left = left;
 
-        setBounds(0 , 0, 128, 128);
+        setBounds(0 , 0, 64, 64);
     }
     @Override
     public void act(float delta) {
@@ -22,3 +22,4 @@ public class Left extends Actor {
         super.draw(batch, parentAlpha);
     }
 }
+
