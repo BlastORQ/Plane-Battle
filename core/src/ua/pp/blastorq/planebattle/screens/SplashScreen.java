@@ -16,7 +16,6 @@ import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import ua.pp.blastorq.planebattle.PlaneBattle;
-import ua.pp.blastorq.planebattle.sprite.Plane;
 
 public class SplashScreen implements Screen{
 
