@@ -65,7 +65,6 @@ public class GameScreen implements Screen
     private HashMap<String, Plane> friendlyPlayers;
     boolean isHit = false;
     private Vector3 touchPos;
-    private float accel = 0;
     public GameScreen() {
         Right RightButton;
 
@@ -166,28 +165,20 @@ public class GameScreen implements Screen
         }
     }
     private void handleInput(final float dt){
-        if(accel != 0){
-            accel /= 1.4;
-        }
         if(player != null) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || isLeft) {
-                accel -= 0.09;
-                if(accel<-2){
-                    accel = -2;
-                }
+                player.setPosition(player.getX() + (-300 * dt), player.getY());
             } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) || isRight){
-                accel += 0.09;
-                if(accel>2){
-                    accel = 2;
-                }
+                player.setPosition(player.getX() + (+300 * dt), player.getY());
+            }else if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+                player.setPosition(player.getX(), player.getY() + (200* dt));
+            }else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+                player.setPosition(player.getX(), player.getY() - 200*dt);
             }
-            player.setPosition(player.getX() + (300 * 10 * accel * dt), player.getY());
             if(player.getX() <0){
-                accel *= -0.9;
-                player.setPosition(0, 64);
-            }else if(player.getX() + playerShip.getWidth()> Gdx.graphics.getWidth()){
-                accel *= -0.9;
                 player.setPosition(Gdx.graphics.getWidth() - player.getWidth(), player.getY());
+            }else if(player.getX() + playerShip.getWidth()> Gdx.graphics.getWidth()){
+                player.setPosition(0, 64);
             }
             if (Gdx.input.isTouched()) {
                 touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -208,6 +199,10 @@ public class GameScreen implements Screen
                 ismiddle = false;
                 isRight = false;
                 isLeft = false;
+            }
+            if(bullety== Gdx.graphics.getHeight() + Bullet.getHeight())
+            {
+                bullety = 64+128;
             }
         }
     }
