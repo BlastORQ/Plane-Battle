@@ -35,9 +35,8 @@ import ua.pp.blastorq.planebattle.actors.Right;
 import ua.pp.blastorq.planebattle.sprite.Plane;
 
 public class GameScreen implements Screen {
-    private final float UPDATE_TIME = 1 / 120f;
-    Array<Rectangle> raindrops;
-    boolean ismiddle = false;
+    private Array<Rectangle> bullets;
+    private boolean ismiddle = false;
     private float timer;
     private OrthographicCamera camera = new OrthographicCamera();
     private Plane player;
@@ -50,12 +49,11 @@ public class GameScreen implements Screen {
     private Texture playerShip, friendlyShip, HitButtonImage, Bullet;
     private HashMap<String, Plane> friendlyPlayers;
     private Vector3 touchPos;
-
+    private float UPDATE_TIME = 1/60f;
     public GameScreen() {
         Right RightButton;
-        raindrops = new Array<Rectangle>();
+        bullets = new Array<Rectangle>();
         Texture rightimage, leftimage;
-        final float UPDATE_TIME = 1 / 60f;
         touchPos = new Vector3();
         leftimage = new Texture("left.png");
         LeftButton = new Left(leftimage);
@@ -92,25 +90,25 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void spawnRaindrop() {
-        Rectangle raindrop = new Rectangle();
-        raindrop.x = player.getX() + (player.getWidth() / 2) - (Bullet.getWidth() / 2);
-        raindrop.y = 192;
-        raindrop.width = 64;
-        raindrop.height = 64;
-        raindrops.add(raindrop);
+    private void spawnBullet() {
+        Rectangle bullet = new Rectangle();
+        bullet.x = player.getX() + (player.getWidth() / 2) - (Bullet.getWidth() / 2);
+        bullet.y = 192;
+        bullet.width = 64;
+        bullet.height = 64;
+        bullets.add(bullet);
     }
 
-    private void drawDrops() {
-        for (Rectangle raindrop : raindrops) {
+    private void drawBullet() {
+        for (Rectangle bullet : bullets) {
             batch.begin();
-            batch.draw(Bullet, raindrop.x, raindrop.y);
+            batch.draw(Bullet, bullet.x, bullet.y);
             batch.end();
         }
-        Iterator<Rectangle> iter = raindrops.iterator();
+        Iterator<Rectangle> iter = bullets.iterator();
         while (iter.hasNext()) {
-            Rectangle raindrop = iter.next();
-            raindrop.y += 1000 * Gdx.graphics.getDeltaTime();
+            Rectangle bullet = iter.next();
+            bullet.y += 1000 * Gdx.graphics.getDeltaTime();
         }
     }
 
@@ -200,9 +198,9 @@ public class GameScreen implements Screen {
         }
         Listener();
         if (Gdx.input.justTouched() && ismiddle) {
-            spawnRaindrop();
+            spawnBullet();
         }
-        drawDrops();
+        drawBullet();
         batch.begin();
         drawPlayer();
         drawAllPlayers();
