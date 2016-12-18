@@ -1,11 +1,11 @@
 package ua.pp.blastorq.planebattle.actors;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+        import com.badlogic.gdx.graphics.Texture;
+        import com.badlogic.gdx.graphics.g2d.Batch;
+        import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Left extends Actor {
-  private  Texture left;
+    private  Texture left;
     public Left(Texture left) {
         this.left = left;
 
@@ -22,4 +22,3 @@ public class Left extends Actor {
         super.draw(batch, parentAlpha);
     }
 }
-

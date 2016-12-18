@@ -21,4 +21,3 @@ public class Plane extends Sprite {
         return false;
     }
 }
-
