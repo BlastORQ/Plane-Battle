@@ -12,7 +12,6 @@ android {
             jniLibs.srcDirs = ['libs']
         }
 
-        instrumentTest.setRoot('tests')ffsss
     }
     defaultConfig {
         applicationId "ua.pp.blastorq.planebattle"
