@@ -4,19 +4,21 @@ package ua.pp.blastorq.planebattle.screens;
 //TODO зробити плавний перехід між екраном літачка
 //TODO зробити синхронний мультиплеєр
 //TODO зробити хп
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
+
+import java.util.Date;
+import java.util.Iterator;
+
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -24,19 +26,17 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.HashMap;
-import java.util.Iterator;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import ua.pp.blastorq.planebattle.actors.HitButton;
 import ua.pp.blastorq.planebattle.actors.Left;
 import ua.pp.blastorq.planebattle.actors.Right;
 import ua.pp.blastorq.planebattle.sprite.Plane;
-
 public class GameScreen implements Screen {
-    private Array<Rectangle> bullets;
-    private boolean ismiddle = false;
     private float timer;
     private OrthographicCamera camera = new OrthographicCamera();
     private Plane player;
@@ -46,14 +46,17 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Socket socket;
     private String id;
-    private Texture playerShip, friendlyShip, HitButtonImage, Bullet;
+    private  Texture playerShip, friendlyShip, HitButtonImage, Bullet;
+    Array<Rectangle> raindrops;
+    private final float UPDATE_TIME = 1/120f;
+    boolean ismiddle = false;
     private HashMap<String, Plane> friendlyPlayers;
     private Vector3 touchPos;
-    private float UPDATE_TIME = 1/60f;
     public GameScreen() {
         Right RightButton;
-        bullets = new Array<Rectangle>();
-        Texture rightimage, leftimage;
+        raindrops = new Array<Rectangle>();
+        Texture  rightimage, leftimage;
+        final float UPDATE_TIME = 1/60f;
         touchPos = new Vector3();
         leftimage = new Texture("left.png");
         LeftButton = new Left(leftimage);
@@ -72,47 +75,42 @@ public class GameScreen implements Screen {
         stage.addActor(LeftButton);
         Gdx.input.setInputProcessor(stage);
     }
-
-    private void drawAllPlayers() {
-        for (HashMap.Entry<String, Plane> entry : friendlyPlayers.entrySet()) {
+    private void drawAllPlayers(){
+        for(HashMap.Entry<String, Plane> entry : friendlyPlayers.entrySet()){
             entry.getValue().draw(batch);
         }
     }
 
-    private void drawStage() {
+    private void drawStage(){
         stage.draw();
         stage.act(Gdx.graphics.getDeltaTime());
     }
-
-    private void drawPlayer() {
+    private void drawPlayer(){
         if (player != null) {
             player.draw(batch);
         }
     }
-
-    private void spawnBullet() {
-        Rectangle bullet = new Rectangle();
-        bullet.x = player.getX() + (player.getWidth() / 2) - (Bullet.getWidth() / 2);
-        bullet.y = 192;
-        bullet.width = 64;
-        bullet.height = 64;
-        bullets.add(bullet);
+    private void spawnRaindrop(){
+        Rectangle raindrop = new Rectangle();
+        raindrop.x = player.getX() + (player.getWidth()/2) - (Bullet.getWidth()/2);
+        raindrop.y = 192;
+        raindrop.width = 64;
+        raindrop.height = 64;
+        raindrops.add(raindrop);
     }
-
-    private void drawBullet() {
-        for (Rectangle bullet : bullets) {
+    private void drawDrops(){
+        for (Rectangle raindrop: raindrops){
             batch.begin();
-            batch.draw(Bullet, bullet.x, bullet.y);
+            batch.draw(Bullet, raindrop.x, raindrop.y);
             batch.end();
         }
-        Iterator<Rectangle> iter = bullets.iterator();
-        while (iter.hasNext()) {
-            Rectangle bullet = iter.next();
-            bullet.y += 1000 * Gdx.graphics.getDeltaTime();
+        Iterator<Rectangle> iter = raindrops.iterator();
+        while (iter.hasNext()){
+            Rectangle raindrop = iter.next();
+            raindrop.y += 1000* Gdx.graphics.getDeltaTime();
         }
     }
-
-    public void SendRequest() {
+    public void SendRequest(){
         Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.GET);
         request.setUrl("https://libgdx.badlogicgames.com");
         Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
@@ -136,32 +134,48 @@ public class GameScreen implements Screen {
     }
 
 
+    private void timermethod(){
+        long startTime = System.currentTimeMillis();
+        long elapsedTime = 0L;
 
-
-    private void handleInput(final float dt) {
-        if (player != null) {
-            if (isLeft) {
+        while (elapsedTime < 60*1000) {
+            //perform db poll/check
+            Gdx.app.log("dc", "df");
+            elapsedTime = (new Date()).getTime() - startTime;
+        }
+    }
+    private void handleInput(final float dt){
+        if(player != null) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || isLeft) {
                 player.setPosition(player.getX() + (-300 * dt), player.getY());
-            } else if (isRight) {
+            } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) || isRight){
                 player.setPosition(player.getX() + (+300 * dt), player.getY());
+            }else if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+                player.setPosition(player.getX(), player.getY() + (200* dt));
+            }else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+                player.setPosition(player.getX(), player.getY() - 200*dt);
             }
-            if (player.getX() < 0) {
+            if(player.getX() <0){
                 player.setPosition(Gdx.graphics.getWidth() - player.getWidth(), player.getY());
-            } else if (player.getX() + playerShip.getWidth() > Gdx.graphics.getWidth()) {
+            }else if(player.getX() + playerShip.getWidth()> Gdx.graphics.getWidth()){
                 player.setPosition(0, 64);
             }
             if (Gdx.input.isTouched()) {
                 touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(touchPos);
-                float touchX = (touchPos.x + 1) / 2 * Gdx.graphics.getWidth();
-                if (touchX <= Gdx.graphics.getWidth() / 3) {
+                float touchX = (touchPos.x+1)/2*Gdx.graphics.getWidth();
+                if(touchX <= Gdx.graphics.getWidth()/3){
                     isLeft = true;
-                } else if (touchX <= Gdx.graphics.getWidth() * 2 / 3) {
+                }else if(touchX <= Gdx.graphics.getWidth()*2/3){
+                    //Gdx.app.log("LOG", "M");
+                     //   spawnRaindrop();
                     ismiddle = true;
-                } else if (touchX > Gdx.graphics.getWidth() * 2 / 3) {
+                }
+                else if(touchX > Gdx.graphics.getWidth()*2/3){
                     isRight = true;
                 }
-            } else {
+            }
+            else {
                 ismiddle = false;
                 isRight = false;
                 isLeft = false;
@@ -170,15 +184,15 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void updateServer(float dt) {
+    private void updateServer(float dt){
         timer += dt;
-        if (timer >= UPDATE_TIME && player != null && player.hasMoved()) {
+        if(timer >= UPDATE_TIME && player !=null && player.hasMoved()){
             JSONObject data = new JSONObject();
             try {
                 data.put("x", player.getX());
                 data.put("y", player.getY());
                 socket.emit("playerMoved", data);
-            } catch (JSONException e) {
+            }catch (JSONException e){
                 Gdx.app.log("SOCKET IO", "Error sending update data");
             }
         }
@@ -192,24 +206,24 @@ public class GameScreen implements Screen {
         handleInput(Gdx.graphics.getDeltaTime());
         updateServer(Gdx.graphics.getDeltaTime());
 
-        if (player == null) {
+        if(player == null) {
             connectSocket();
             Gdx.app.log("FAIL", "CONNECT");
         }
         Listener();
-        if (Gdx.input.justTouched() && ismiddle) {
-            spawnBullet();
+        if(Gdx.input.justTouched() && ismiddle){
+            spawnRaindrop();
         }
-        drawBullet();
+        drawDrops();
         batch.begin();
         drawPlayer();
         drawAllPlayers();
         batch.end();
         drawStage();
     }
-
     public void Listener() {
-        LeftButton.addListener(new ClickListener() {
+        LeftButton.addListener(new ClickListener()
+        {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("LEFT", "PRESS");
@@ -253,17 +267,17 @@ public class GameScreen implements Screen {
 
     }
 
-    private void connectSocket() {
+    private void connectSocket(){
         try {
             socket = IO.socket("http://35.163.56.214:8080/");
             socket.connect();
-        } catch (Exception e) {
+        }catch(Exception e){
             Gdx.app.log("NO", "");
         }
     }
 
-    private void configSocketEvents() {
-        try {
+    private void configSocketEvents(){
+        try{
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -312,7 +326,7 @@ public class GameScreen implements Screen {
                         String playerId = data.getString("id");
                         Double x = data.getDouble("x");
                         Double y = data.getDouble("y");
-                        if (friendlyPlayers.get(playerId) != null) {
+                        if(friendlyPlayers.get(playerId) !=null){
                             friendlyPlayers.get(playerId).setPosition(x.floatValue(), y.floatValue());
                         }
                     } catch (JSONException e) {
@@ -336,8 +350,7 @@ public class GameScreen implements Screen {
                         Gdx.app.log("" + e.getMessage(), "");
                     }
                 }
-            });
-        } catch (Exception e) {
+            }); }catch(Exception e) {
             Gdx.app.log("NO CONFIG EVENT", "");
         }
     }
