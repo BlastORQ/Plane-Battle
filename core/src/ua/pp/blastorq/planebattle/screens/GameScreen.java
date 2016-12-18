@@ -167,7 +167,7 @@ public class GameScreen implements Screen
     }
     private void handleInput(final float dt){
         if(accel != 0){
-            accel /= 1.4;
+            accel /= 1.8;
         }
         if(player != null) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || isLeft) {
@@ -196,8 +196,6 @@ public class GameScreen implements Screen
                 if(touchX <= Gdx.graphics.getWidth()/3){
                     isLeft = true;
                 }else if(touchX <= Gdx.graphics.getWidth()*2/3){
-                    //Gdx.app.log("LOG", "M");
-                    //   spawnRaindrop();
                     ismiddle = true;
                 }
                 else if(touchX > Gdx.graphics.getWidth()*2/3){
