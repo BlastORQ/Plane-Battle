@@ -90,7 +90,7 @@ public class GameScreen implements Screen
         configSocketEvents();
         stage.addActor(RightButton);
         stage.addActor(LeftButton);
-        // stage.addActor(hitButton);
+       // stage.addActor(hitButton);
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -197,7 +197,7 @@ public class GameScreen implements Screen
                     isLeft = true;
                 }else if(touchX <= Gdx.graphics.getWidth()*2/3){
                     //Gdx.app.log("LOG", "M");
-                    //   spawnRaindrop();
+                     //   spawnRaindrop();
                     ismiddle = true;
                 }
                 else if(touchX > Gdx.graphics.getWidth()*2/3){
