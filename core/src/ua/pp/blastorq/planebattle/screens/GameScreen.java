@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Timer;
+
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import org.json.JSONArray;
@@ -29,11 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -42,33 +36,24 @@ import ua.pp.blastorq.planebattle.actors.HitButton;
 import ua.pp.blastorq.planebattle.actors.Left;
 import ua.pp.blastorq.planebattle.actors.Right;
 import ua.pp.blastorq.planebattle.sprite.Plane;
-public class GameScreen implements Screen
-{
-
-    private Texture[] bullmass = new Texture[10];
+public class GameScreen implements Screen {
     private float timer;
     private OrthographicCamera camera = new OrthographicCamera();
     private Plane player;
     private Left LeftButton;
-    private boolean isLeft = false, isRight = false, isShoot;
-    private Timer time = new Timer();
+    private boolean isLeft = false, isRight = false;
     private SpriteBatch batch;
     private Stage stage;
     private Socket socket;
     private String id;
     private  Texture playerShip, friendlyShip, HitButtonImage, Bullet;
     Array<Rectangle> raindrops;
-    private final float UPDATE_TIME = 1/60f;
-    float timing;
-    private double bulletx , bullety = 64 + 128;
+    private final float UPDATE_TIME = 1/120f;
     boolean ismiddle = false;
     private HashMap<String, Plane> friendlyPlayers;
-    boolean isHit = false;
     private Vector3 touchPos;
     public GameScreen() {
         Right RightButton;
-
-        HitButton hitButton;
         raindrops = new Array<Rectangle>();
         Texture  rightimage, leftimage;
         final float UPDATE_TIME = 1/60f;
@@ -80,7 +65,6 @@ public class GameScreen implements Screen
         stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         playerShip = new Texture("Plane.png");
         friendlyShip = new Texture("Plane1.png");
-        hitButton = new HitButton(HitButtonImage);
         RightButton = new Right(rightimage);
         HitButtonImage = new Texture("icon.png");
         Bullet = new Texture("bullet.png");
@@ -89,15 +73,14 @@ public class GameScreen implements Screen
         configSocketEvents();
         stage.addActor(RightButton);
         stage.addActor(LeftButton);
-       // stage.addActor(hitButton);
         Gdx.input.setInputProcessor(stage);
     }
-
     private void drawAllPlayers(){
         for(HashMap.Entry<String, Plane> entry : friendlyPlayers.entrySet()){
             entry.getValue().draw(batch);
         }
     }
+
     private void drawStage(){
         stage.draw();
         stage.act(Gdx.graphics.getDeltaTime());
@@ -105,7 +88,6 @@ public class GameScreen implements Screen
     private void drawPlayer(){
         if (player != null) {
             player.draw(batch);
-            bulletx = player.getX()/2;
         }
     }
     private void spawnRaindrop(){
@@ -116,7 +98,7 @@ public class GameScreen implements Screen
         raindrop.height = 64;
         raindrops.add(raindrop);
     }
-    public void drawdrops(){
+    private void drawDrops(){
         for (Rectangle raindrop: raindrops){
             batch.begin();
             batch.draw(Bullet, raindrop.x, raindrop.y);
@@ -126,8 +108,6 @@ public class GameScreen implements Screen
         while (iter.hasNext()){
             Rectangle raindrop = iter.next();
             raindrop.y += 1000* Gdx.graphics.getDeltaTime();
-
-
         }
     }
     public void SendRequest(){
@@ -166,14 +146,10 @@ public class GameScreen implements Screen
     }
     private void handleInput(final float dt){
         if(player != null) {
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || isLeft) {
+            if (isLeft) {
                 player.setPosition(player.getX() + (-300 * dt), player.getY());
-            } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) || isRight){
+            } else if(isRight) {
                 player.setPosition(player.getX() + (+300 * dt), player.getY());
-            }else if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-                player.setPosition(player.getX(), player.getY() + (200* dt));
-            }else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-                player.setPosition(player.getX(), player.getY() - 200*dt);
             }
             if(player.getX() <0){
                 player.setPosition(Gdx.graphics.getWidth() - player.getWidth(), player.getY());
@@ -200,10 +176,7 @@ public class GameScreen implements Screen
                 isRight = false;
                 isLeft = false;
             }
-            if(bullety== Gdx.graphics.getHeight() + Bullet.getHeight())
-            {
-                bullety = 64+128;
-            }
+
         }
     }
 
@@ -233,12 +206,11 @@ public class GameScreen implements Screen
             connectSocket();
             Gdx.app.log("FAIL", "CONNECT");
         }
-        timing +=delta;
         Listener();
         if(Gdx.input.justTouched() && ismiddle){
             spawnRaindrop();
         }
-        drawdrops();
+        drawDrops();
         batch.begin();
         drawPlayer();
         drawAllPlayers();
@@ -350,8 +322,6 @@ public class GameScreen implements Screen
                         String playerId = data.getString("id");
                         Double x = data.getDouble("x");
                         Double y = data.getDouble("y");
-
-                        bulletx = (Double) x/2;
                         if(friendlyPlayers.get(playerId) !=null){
                             friendlyPlayers.get(playerId).setPosition(x.floatValue(), y.floatValue());
                         }
