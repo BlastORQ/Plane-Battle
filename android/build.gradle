@@ -1,6 +1,6 @@
 android {
     buildToolsVersion "25.0.1"
-    compileSdkVersion 24
+    compileSdkVersion 25
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId "ua.pp.blastorq.planebattle"
         minSdkVersion 8
-        targetSdkVersion 24
+        targetSdkVersion 25
     }
 }
 
