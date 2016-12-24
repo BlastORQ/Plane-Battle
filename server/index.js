@@ -2,6 +2,7 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var players = [];
+var playercount = 0;
 
 server.listen(8080, function(){
 	console.log("Server is now running...");
@@ -9,6 +10,12 @@ server.listen(8080, function(){
 
 io.on('connection', function(socket){
 	console.log("Player Connected!");
+	playercount += 1;
+	console.log("" + playercount);
+	socket.on('CountPlayers',function(){
+      playercount +=1;
+                             	console.log("" + playercount);
+           });
 	socket.emit('socketID', { id: socket.id });
 	socket.emit('getPlayers', players);
 	socket.broadcast.emit('newPlayer', { id: socket.id });
@@ -25,6 +32,8 @@ io.on('connection', function(socket){
 	   }
 	});
 	socket.on('disconnect', function(){
+	    playercount -= 1;
+	    console.log("" + playercount)
 		console.log("Player Disconnected");
 		socket.broadcast.emit('playerDisconnected', { id: socket.id });
 		for(var i = 0; i < players.length; i++){

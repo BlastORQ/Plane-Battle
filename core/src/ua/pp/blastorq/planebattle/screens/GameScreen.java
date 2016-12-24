@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import org.json.JSONArray;
@@ -29,12 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
-
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -45,7 +38,6 @@ import ua.pp.blastorq.planebattle.sprite.Plane;
 public class GameScreen implements Screen
 {
 
-    private Texture[] bullmass = new Texture[10];
     private float timer;
     private OrthographicCamera camera = new OrthographicCamera();
     private Plane player;
@@ -56,23 +48,26 @@ public class GameScreen implements Screen
     private Stage stage;
     private Socket socket;
     private String id;
+    private Right RightButton;
     private  Texture playerShip, friendlyShip, HitButtonImage, Bullet;
-    Array<Rectangle> raindrops;
-    private final float UPDATE_TIME = 1/60f;
+    private Array<Rectangle> raindrops;
+
     float timing;
     private double bulletx , bullety = 64 + 128;
     boolean ismiddle = false;
     private HashMap<String, Plane> friendlyPlayers;
     boolean isHit = false;
     private Vector3 touchPos;
+    private Texture BulletImage;
+    private final float UPDATE_TIME = 1/60f;
     private float accel = 0;
+    HitButton hitButton;
     public GameScreen() {
-        Right RightButton;
-
-        HitButton hitButton;
+        BulletImage = new Texture("icon.png");
+        hitButton = new HitButton(BulletImage);
         raindrops = new Array<Rectangle>();
+        RightButton = new Right(new Texture("right.png"));
         Texture  rightimage, leftimage;
-        final float UPDATE_TIME = 1/60f;
         touchPos = new Vector3();
         leftimage = new Texture("left.png");
         LeftButton = new Left(leftimage);
@@ -81,7 +76,6 @@ public class GameScreen implements Screen
         stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         playerShip = new Texture("Plane.png");
         friendlyShip = new Texture("Plane1.png");
-        hitButton = new HitButton(HitButtonImage);
         RightButton = new Right(rightimage);
         HitButtonImage = new Texture("icon.png");
         Bullet = new Texture("bullet.png");
@@ -90,6 +84,7 @@ public class GameScreen implements Screen
         configSocketEvents();
         stage.addActor(RightButton);
         stage.addActor(LeftButton);
+        stage.addActor(hitButton);
         // stage.addActor(hitButton);
         Gdx.input.setInputProcessor(stage);
     }
@@ -109,7 +104,7 @@ public class GameScreen implements Screen
             bulletx = player.getX()/2;
         }
     }
-    private void spawnRaindrop(){
+    private void spawnBullet(){
         Rectangle raindrop = new Rectangle();
         raindrop.x = player.getX() + (player.getWidth()/2) - (Bullet.getWidth()/2);
         raindrop.y = 192;
@@ -117,12 +112,13 @@ public class GameScreen implements Screen
         raindrop.height = 64;
         raindrops.add(raindrop);
     }
-    public void drawdrops(){
+    public void drawBullet(){
         for (Rectangle raindrop: raindrops){
             batch.begin();
             batch.draw(Bullet, raindrop.x, raindrop.y);
             batch.end();
         }
+
         Iterator<Rectangle> iter = raindrops.iterator();
         while (iter.hasNext()){
             Rectangle raindrop = iter.next();
@@ -239,9 +235,9 @@ public class GameScreen implements Screen
         timing +=delta;
         Listener();
         if(Gdx.input.justTouched() && ismiddle){
-            spawnRaindrop();
+            spawnBullet();
         }
-        drawdrops();
+        drawBullet();
         batch.begin();
         drawPlayer();
         drawAllPlayers();
@@ -253,16 +249,23 @@ public class GameScreen implements Screen
         {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("LEFT", "PRESS");
+                isLeft = true;
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-
+                isLeft = false;
                 super.touchUp(event, x, y, pointer, button);
             }
         });
+        RightButton.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
 
     }
 
@@ -311,6 +314,11 @@ public class GameScreen implements Screen
                     Gdx.app.log("SocketIO", "Connected");
                     player = new Plane(playerShip);
                 }
+            }).on("CountPlayers", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+
+                }
             }).on("socketID", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -353,7 +361,6 @@ public class GameScreen implements Screen
                         String playerId = data.getString("id");
                         Double x = data.getDouble("x");
                         Double y = data.getDouble("y");
-
                         bulletx = (Double) x/2;
                         if(friendlyPlayers.get(playerId) !=null){
                             friendlyPlayers.get(playerId).setPosition(x.floatValue(), y.floatValue());
