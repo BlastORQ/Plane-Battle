@@ -8,14 +8,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import ua.pp.blastorq.planebattle.tools.SpriteAccessor;
-
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import ua.pp.blastorq.planebattle.PlaneBattle;
+import ua.pp.blastorq.planebattle.tools.SpriteAccessor;
 
 public class SplashScreen implements Screen{
 
