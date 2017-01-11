@@ -1,22 +1,21 @@
 package ua.pp.blastorq.planebattle.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-
-import java.util.Iterator;
-
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 import ua.pp.blastorq.planebattle.actors.HitButton;
 import ua.pp.blastorq.planebattle.actors.Left;
@@ -24,6 +23,10 @@ import ua.pp.blastorq.planebattle.actors.Right;
 import ua.pp.blastorq.planebattle.sprite.Plane;
 public class GameScreen implements Screen
 {
+    private final float UPDATE_TIME = 1 / 60f;
+    boolean isHit = false;
+    Texture background;
+    HitButton hitButton;
     private OrthographicCamera camera = new OrthographicCamera();
     private Plane player;
     private Left LeftButton;
@@ -36,13 +39,9 @@ public class GameScreen implements Screen
     private double bulletx , bullety = 64 + 128;
     private boolean ismiddle = false;
     private HashMap<String, Plane> friendlyPlayers;
-    boolean isHit = false;
     private Vector3 touchPos;
-    Texture background;
     private Texture BulletImage;
-    private final float UPDATE_TIME = 1/60f;
     private float accel = 0;
-    HitButton hitButton;
     public GameScreen() {
         background = new Texture("bg.png");
         BulletImage = new Texture("icon.png");
@@ -158,7 +157,7 @@ public class GameScreen implements Screen
             spawnBullet();
         }
         batch.begin();
-        batch.draw(background, 0 ,0 , Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(background, 0, 0, MainMenuScreen.SCR_WIDTH, MainMenuScreen.SCR_HEIGHT);
         batch.end();
         drawBullet();
         batch.begin();
@@ -200,6 +199,8 @@ public class GameScreen implements Screen
     }
     @Override
     public void resize(int width, int height) {
+        MainMenuScreen.SCR_WIDTH = Gdx.graphics.getWidth();
+        MainMenuScreen.SCR_HEIGHT = Gdx.graphics.getHeight();
     }
     @Override
     public void resume() {
