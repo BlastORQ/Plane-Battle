@@ -18,12 +18,15 @@ import ua.pp.blastorq.planebattle.actors.Off;
 import ua.pp.blastorq.planebattle.actors.OffMusicButton;
 import ua.pp.blastorq.planebattle.actors.On;
 import ua.pp.blastorq.planebattle.actors.StartButton;
+import ua.pp.blastorq.planebattle.objects.MovHandler;
 
 public class MainMenuScreen implements Screen {
     public static float SCR_WIDTH = Gdx.graphics.getWidth(), SCR_HEIGHT = Gdx.graphics.getHeight();
     BitmapFont font;
     Music music;
     boolean volume;
+    ua.pp.blastorq.planebattle.objects.Background frontBackground, backBackground;
+    MovHandler movHandler;
     private PlaneBattle pb;
     private Texture playbutton, bg, offmusicbutton, cancelmusic, player, on;
     private SpriteBatch batch;
@@ -36,6 +39,9 @@ public class MainMenuScreen implements Screen {
     private On onb;
     public MainMenuScreen(PlaneBattle planeBattle){
         this.pb = planeBattle;
+        movHandler = new MovHandler(0, -20);
+        frontBackground = movHandler.getFrontBackground();
+        backBackground = movHandler.getBackBackground();
         on = new Texture("volume-control.png");
         music = Gdx.audio.newMusic(Gdx.files.internal("proj1_menu.ogg"));
         music.setLooping(true);
@@ -53,7 +59,6 @@ public class MainMenuScreen implements Screen {
         cancelmusic = new Texture("volume-adjustment-mute.png");
         off = new Off(cancelmusic, startButton.getX() + 10, startButton.getY() - 10 - offmusicbutton.getHeight() + 5, cancelmusic.getWidth(), cancelmusic.getHeight());
         onb = new On(on, startButton.getX() + 10, startButton.getY() - 10 - offmusicbutton.getHeight() + 5, cancelmusic.getWidth(), cancelmusic.getHeight());
-        stage.addActor(background);
         stage.addActor(startButton);
         stage.addActor(offMusicButton);
         stage.addActor(off);
@@ -67,6 +72,10 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        batch.begin();
+        batch.draw(bg, frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth() + 150, frontBackground.getHeight() + 150);
+        batch.draw(bg, backBackground.getX(), backBackground.getY(), backBackground.getWidth() + 150, backBackground.getHeight() + 150);
+        batch.end();
         stage.act(delta);
         stage.draw();
         batch.begin();
@@ -74,6 +83,7 @@ public class MainMenuScreen implements Screen {
         font.draw(batch, "PLAY", (SCR_WIDTH / 2) - (playbutton.getWidth() / 2) + 50, (SCR_HEIGHT / 2) - (playbutton.getHeight() / 2) + 155);
         batch.end();
         Listener();
+        movHandler.update(delta);
     }
     private void Listener() {
         startButton.addListener(new ClickListener() {
@@ -98,6 +108,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 music.pause();
+
                 off.remove();
                 stage.addActor(onb);
                 super.touchUp(event, x, y, pointer, button);

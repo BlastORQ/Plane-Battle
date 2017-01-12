@@ -50,7 +50,7 @@ public class GameScreen implements Screen
         background = new Texture("bg.png");
         BulletImage = new Texture("icon.png");
         hitButton = new HitButton(BulletImage);
-        movHandler = new MovHandler(0);
+        movHandler = new MovHandler(0, -100);
         raindrops = new Array<Rectangle>();
         initGameObjects();
         RightButton = new Right(new Texture("right.png"));

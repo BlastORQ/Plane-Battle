@@ -4,10 +4,9 @@ package ua.pp.blastorq.planebattle.objects;
 import com.badlogic.gdx.Gdx;
 
 public class MovHandler {
-    public static final int MOV_SPEED = -59;
     private Background frontBackground, backBackground;
 
-    public MovHandler(float yPos) {
+    public MovHandler(float yPos, int MOV_SPEED) {
         frontBackground = new Background(0, yPos, Gdx.graphics.getWidth() + 150, Gdx.graphics.getHeight() + 150, MOV_SPEED);
         backBackground = new Background(0, frontBackground.getTailY(), Gdx.graphics.getWidth() + 150, Gdx.graphics.getHeight() + 150, MOV_SPEED);
 
