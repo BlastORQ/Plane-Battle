@@ -1,23 +1,28 @@
 package ua.pp.blastorq.planebattle.actors;
 
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class StartButton extends Actor {
-    Texture image;
+public class OffMusicButton extends Actor {
+    private Texture image;
     private float x, y, width, height;
 
-    public StartButton(Texture image, float x, float y, float width, float height) {
+    public OffMusicButton(Texture image, float x, float y, float width, float height) {
         this.image = image;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.setPosition(x, y);
-        setBounds(x, y, width, height);
 
+    }
+
+    public Texture getImage() {
+        return image;
+    }
+
+    public void setImage(Texture image) {
+        this.image = image;
     }
 
     @Override
@@ -26,8 +31,18 @@ public class StartButton extends Actor {
     }
 
     @Override
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    @Override
     public float getY() {
         return y;
+    }
+
+    @Override
+    public void setY(float y) {
+        this.y = y;
     }
 
     @Override
@@ -36,13 +51,23 @@ public class StartButton extends Actor {
     }
 
     @Override
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    @Override
     public float getHeight() {
         return height;
     }
 
     @Override
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
+        batch.draw(image, getX(), getY(), width, height);
         super.draw(batch, parentAlpha);
-        batch.draw(image, x, y, width, height);
     }
 }

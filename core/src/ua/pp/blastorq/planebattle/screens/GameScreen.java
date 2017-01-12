@@ -96,7 +96,6 @@ public class GameScreen implements Screen
             batch.draw(Bullet, raindrop.x, raindrop.y);
             batch.end();
         }
-
         Iterator<Rectangle> iter = raindrops.iterator();
         while (iter.hasNext()){
             Rectangle raindrop = iter.next();
@@ -201,6 +200,8 @@ public class GameScreen implements Screen
     public void resize(int width, int height) {
         MainMenuScreen.SCR_WIDTH = Gdx.graphics.getWidth();
         MainMenuScreen.SCR_HEIGHT = Gdx.graphics.getHeight();
+        Gdx.app.log("", "" + MainMenuScreen.SCR_WIDTH);
+        Gdx.app.log("", "" + MainMenuScreen.SCR_HEIGHT);
     }
     @Override
     public void resume() {

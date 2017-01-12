@@ -63,12 +63,8 @@ nb-configuration.xml
 
 .gradle
 gradle-app.setting
-android/build.gradle
-build.gradle
-
+build/
 
 ## OS Specific
 .DS_Store
 Thumbs.db
-android/libs/
-/build.gradle

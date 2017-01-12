@@ -13,17 +13,19 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.actors.Background;
+import ua.pp.blastorq.planebattle.actors.OffMusicButton;
 import ua.pp.blastorq.planebattle.actors.StartButton;
 
 public class MainMenuScreen implements Screen {
     public static float SCR_WIDTH = Gdx.graphics.getWidth(), SCR_HEIGHT = Gdx.graphics.getHeight();
     BitmapFont font;
     private PlaneBattle pb;
-    private Texture playbutton, bg;
+    private Texture playbutton, bg, offmusicbutton;
     private SpriteBatch batch;
     private Viewport viewport;
     private Stage stage;
     private Background background;
+    private OffMusicButton offMusicButton;
     private StartButton startButton;
     public MainMenuScreen(PlaneBattle planeBattle){
         this.pb = planeBattle;
@@ -34,8 +36,11 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(viewport);
         startButton = new StartButton(playbutton, (SCR_WIDTH / 2) - (playbutton.getWidth() / 2), (SCR_HEIGHT / 2) - (playbutton.getHeight() / 2) + 50, playbutton.getWidth(), playbutton.getHeight());
         background = new Background(bg, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        offmusicbutton = new Texture("btn.png");
+        offMusicButton = new OffMusicButton(offmusicbutton, startButton.getX(), startButton.getY() - 10 - offmusicbutton.getHeight(), offmusicbutton.getWidth(), offmusicbutton.getHeight());
         stage.addActor(background);
         stage.addActor(startButton);
+        stage.addActor(offMusicButton);
         font = new BitmapFont(Gdx.files.internal("font/font.fnt"));
         Gdx.input.setInputProcessor(stage);
     }

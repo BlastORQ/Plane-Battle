@@ -18,10 +18,10 @@ import ua.pp.blastorq.planebattle.tools.SpriteAccessor;
 
 public class SplashScreen implements Screen{
 
+    Texture f;
     private TweenManager manager;
     private SpriteBatch batch;
     private Sprite sprite ,logo;
-    Texture f;
     private PlaneBattle game;
     private Screen nextScreen;
 
@@ -40,9 +40,6 @@ public class SplashScreen implements Screen{
 
 
         float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
-        float desiredWidth = width * 0.7f;
-        float scale = sprite.getWidth();
 
         sprite.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         sprite.setPosition(0 , 0);
