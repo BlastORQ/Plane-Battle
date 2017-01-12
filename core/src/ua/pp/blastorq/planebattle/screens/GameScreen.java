@@ -20,6 +20,8 @@ import java.util.Iterator;
 import ua.pp.blastorq.planebattle.actors.HitButton;
 import ua.pp.blastorq.planebattle.actors.Left;
 import ua.pp.blastorq.planebattle.actors.Right;
+import ua.pp.blastorq.planebattle.objects.Background;
+import ua.pp.blastorq.planebattle.objects.MovHandler;
 import ua.pp.blastorq.planebattle.sprite.Plane;
 public class GameScreen implements Screen
 {
@@ -27,6 +29,7 @@ public class GameScreen implements Screen
     boolean isHit = false;
     Texture background;
     HitButton hitButton;
+    Background frontBackground, backBackground;
     private OrthographicCamera camera = new OrthographicCamera();
     private Plane player;
     private Left LeftButton;
@@ -42,11 +45,14 @@ public class GameScreen implements Screen
     private Vector3 touchPos;
     private Texture BulletImage;
     private float accel = 0;
+    private MovHandler movHandler;
     public GameScreen() {
         background = new Texture("bg.png");
         BulletImage = new Texture("icon.png");
         hitButton = new HitButton(BulletImage);
+        movHandler = new MovHandler(0);
         raindrops = new Array<Rectangle>();
+        initGameObjects();
         RightButton = new Right(new Texture("right.png"));
         Texture  rightimage, leftimage;
         touchPos = new Vector3();
@@ -81,6 +87,11 @@ public class GameScreen implements Screen
             player.draw(batch);
             bulletx = player.getX()/2;
         }
+    }
+
+    private void initGameObjects() {
+        frontBackground = movHandler.getFrontBackground();
+        backBackground = movHandler.getBackBackground();
     }
     private void spawnBullet(){
         Rectangle raindrop = new Rectangle();
@@ -152,11 +163,13 @@ public class GameScreen implements Screen
     public void render(float delta) {
         handleInput(Gdx.graphics.getDeltaTime());
         Listener();
+        movHandler.update(delta);
         if(Gdx.input.justTouched() && ismiddle){
             spawnBullet();
         }
         batch.begin();
-        batch.draw(background, 0, 0, MainMenuScreen.SCR_WIDTH, MainMenuScreen.SCR_HEIGHT);
+        batch.draw(background, frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth(), frontBackground.getHeight());
+        batch.draw(background, backBackground.getX(), backBackground.getY(), backBackground.getWidth(), backBackground.getHeight());
         batch.end();
         drawBullet();
         batch.begin();

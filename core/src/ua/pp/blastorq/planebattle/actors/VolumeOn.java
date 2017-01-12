@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class OffMusicButton extends Actor {
+public class VolumeOn extends Actor {
     private Texture image;
     private float x, y, width, height;
 
-    public OffMusicButton(Texture image, float x, float y, float width, float height) {
+    public VolumeOn(Texture image, float x, float y, float width, float height) {
         this.image = image;
         this.x = x;
         this.y = y;
