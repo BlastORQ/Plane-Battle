@@ -168,7 +168,7 @@ public class GameScreen implements Screen
             spawnBullet();
         }
         batch.begin();
-        batch.draw(background, frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth(), frontBackground.getHeight());
+        batch.draw(background, frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth() +150, frontBackground.getHeight()+150);
         batch.draw(background, backBackground.getX(), backBackground.getY(), backBackground.getWidth(), backBackground.getHeight());
         batch.end();
         drawBullet();
