@@ -2,7 +2,6 @@ package ua.pp.blastorq.planebattle.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,12 +17,14 @@ import ua.pp.blastorq.planebattle.actors.Off;
 import ua.pp.blastorq.planebattle.actors.OffMusicButton;
 import ua.pp.blastorq.planebattle.actors.On;
 import ua.pp.blastorq.planebattle.actors.StartButton;
+import ua.pp.blastorq.planebattle.loader.ResourceLoader;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
+
 
 public class MainMenuScreen implements Screen {
     public static float SCR_WIDTH = Gdx.graphics.getWidth(), SCR_HEIGHT = Gdx.graphics.getHeight();
     BitmapFont font;
-    Music music;
+    //Music music;
     boolean volume;
     ua.pp.blastorq.planebattle.objects.Background frontBackground, backBackground;
     MovHandler movHandler;
@@ -43,9 +44,6 @@ public class MainMenuScreen implements Screen {
         frontBackground = movHandler.getFrontBackground();
         backBackground = movHandler.getBackBackground();
         on = new Texture("volume-control.png");
-        music = Gdx.audio.newMusic(Gdx.files.internal("proj1_menu.ogg"));
-        music.setLooping(true);
-        music.play();
         playbutton = new Texture("start.png");
         player = new Texture("Plane.png");
         batch = new SpriteBatch();
@@ -68,6 +66,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        ResourceLoader.menu.play();
     }
 
     @Override
@@ -94,7 +93,8 @@ public class MainMenuScreen implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                pb.setScreen(new GameScreen());
+                pb.setScreen(new GameScreen(pb));
+                ResourceLoader.menu.stop();
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -107,7 +107,7 @@ public class MainMenuScreen implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                music.pause();
+                ResourceLoader.menu.pause();
 
                 off.remove();
                 stage.addActor(onb);
@@ -115,14 +115,14 @@ public class MainMenuScreen implements Screen {
             }
         });
         onb.addListener(new ClickListener() {
-                            @Override
-                            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                 return super.touchDown(event, x, y, pointer, button);
                             }
 
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                                music.play();
+                                ResourceLoader.menu.play();
                                 onb.remove();
                                 stage.addActor(off);
                                 super.touchUp(event, x, y, pointer, button);
@@ -136,6 +136,7 @@ public class MainMenuScreen implements Screen {
         SCR_WIDTH = Gdx.graphics.getWidth();
         SCR_HEIGHT = Gdx.graphics.getHeight();
     }
+
 
     @Override
     public void pause() {
