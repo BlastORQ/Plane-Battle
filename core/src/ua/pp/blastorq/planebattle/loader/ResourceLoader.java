@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import java.util.HashMap;
 
+import ua.pp.blastorq.planebattle.actors.Button;
 import ua.pp.blastorq.planebattle.actors.HitButton;
 import ua.pp.blastorq.planebattle.actors.Left;
 import ua.pp.blastorq.planebattle.actors.Right;
@@ -26,17 +27,17 @@ import ua.pp.blastorq.planebattle.sprite.Plane;
 
 public class ResourceLoader {
     public static Music menu, game;
-    public static Texture background;
+    public static Texture background, btn, line;
     public static HitButton hitButton;
     public static Background frontBackground, backBackground;
     public static OrthographicCamera camera = new OrthographicCamera();
-    public static Plane player;
+    public static Plane player, player1;
     public static Left LeftButton;
     public static boolean isLeft = false, isRight = false, isShoot;
     public static SpriteBatch batch;
     public static Stage stage;
     public static Right RightButton;
-    public static Texture playerShip, HitButtonImage, Bullet;
+    public static Texture playerShip, HitButtonImage, Bullet, playerShip1;
     public static Array<Rectangle> raindrops;
     public static double bulletx, bullety = 64 + 128;
     public static boolean ismiddle = false;
@@ -45,13 +46,17 @@ public class ResourceLoader {
     public static Texture BulletImage;
     public static float accel = 0;
     public static MovHandler movHandler;
+    public static Button button;
     private final float UPDATE_TIME = 1 / 60f;
     boolean isHit = false;
 
     public void load() {
         background = new Texture("bg.png");
         BulletImage = new Texture("icon.png");
+        btn = new Texture("btn.png");
+        playerShip1 = new Texture("Plane1.png");
         hitButton = new HitButton(BulletImage);
+        line = new Texture("line.png");
         movHandler = new MovHandler(0, -100);
         raindrops = new Array<Rectangle>();
         menu = Gdx.audio.newMusic(Gdx.files.internal("proj1_menu.ogg"));
@@ -76,5 +81,6 @@ public class ResourceLoader {
         frontBackground = movHandler.getFrontBackground();
         backBackground = movHandler.getBackBackground();
         Gdx.input.setInputProcessor(stage);
+        player1 = new Plane(playerShip1);
     }
 }

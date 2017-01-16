@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.actors.Background;
+import ua.pp.blastorq.planebattle.actors.Button;
+import ua.pp.blastorq.planebattle.actors.Cancel;
 import ua.pp.blastorq.planebattle.actors.Off;
 import ua.pp.blastorq.planebattle.actors.OffMusicButton;
 import ua.pp.blastorq.planebattle.actors.On;
@@ -28,6 +30,7 @@ public class MainMenuScreen implements Screen {
     boolean volume;
     ua.pp.blastorq.planebattle.objects.Background frontBackground, backBackground;
     MovHandler movHandler;
+    Button button;
     private PlaneBattle pb;
     private Texture playbutton, bg, offmusicbutton, cancelmusic, player, on;
     private SpriteBatch batch;
@@ -38,6 +41,8 @@ public class MainMenuScreen implements Screen {
     private StartButton startButton;
     private Off off;
     private On onb;
+    private Cancel cancel;
+    private Texture canc;
     public MainMenuScreen(PlaneBattle planeBattle){
         this.pb = planeBattle;
         movHandler = new MovHandler(0, -20);
@@ -57,11 +62,24 @@ public class MainMenuScreen implements Screen {
         cancelmusic = new Texture("volume-adjustment-mute.png");
         off = new Off(cancelmusic, startButton.getX() + 10, startButton.getY() - 10 - offmusicbutton.getHeight() + 5, cancelmusic.getWidth(), cancelmusic.getHeight());
         onb = new On(on, startButton.getX() + 10, startButton.getY() - 10 - offmusicbutton.getHeight() + 5, cancelmusic.getWidth(), cancelmusic.getHeight());
+        button = new Button(offmusicbutton, offMusicButton.getX() + offmusicbutton.getWidth() + 10, offMusicButton.getY(), offmusicbutton.getWidth(), offmusicbutton.getHeight());
+        canc = new Texture("cancel-music.png");
+        cancel = new Cancel(canc, button.getX(), button.getY(), canc.getWidth(), canc.getHeight());
         stage.addActor(startButton);
         stage.addActor(offMusicButton);
         stage.addActor(off);
+        stage.addActor(button);
+        stage.addActor(cancel);
         font = new BitmapFont(Gdx.files.internal("font/font.fnt"));
         Gdx.input.setInputProcessor(stage);
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+        float gameWidth = 136;
+        float gameHeight = screenHeight / (screenWidth / gameWidth);
+        int midPointY = (int) (gameHeight / 2);
+        int midPointX = (int) (gameWidth / 2);
+        SCR_WIDTH = gameWidth;
+        SCR_HEIGHT = gameHeight;
     }
     @Override
     public void show() {

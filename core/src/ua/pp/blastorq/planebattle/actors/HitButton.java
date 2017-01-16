@@ -9,7 +9,7 @@ public class HitButton extends Actor {
 
     public HitButton(Texture texture) {
         this.texture = texture;
-        setBounds((Gdx.graphics.getWidth()/2)-32, 0, 64, 64);
+        setBounds((Gdx.graphics.getWidth() / 2) - 64, 0, 64, 64);
     }
 
     @Override
