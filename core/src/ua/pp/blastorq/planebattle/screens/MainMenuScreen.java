@@ -147,7 +147,23 @@ public class MainMenuScreen implements Screen {
                             }
                         }
         );
+        cancel.addListener(new ClickListener() {
+                               @Override
+                               public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                   Gdx.app.log("sd", "Sd");
+                                   return super.touchDown(event, x, y, pointer, button);
+                               }
 
+                               @Override
+                               public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                                   super.touchUp(event, x, y, pointer, button);
+                               }
+                           }
+        );
+    }
+
+    public Cancel getCancel() {
+        return cancel;
     }
     @Override
     public void resize(int width, int height) {

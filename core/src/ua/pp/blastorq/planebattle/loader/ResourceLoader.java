@@ -21,9 +21,6 @@ import ua.pp.blastorq.planebattle.objects.Background;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
 import ua.pp.blastorq.planebattle.sprite.Plane;
 
-/**
- * Created by Vector on 14.01.2017.
- */
 
 public class ResourceLoader {
     public static Music menu, game;

@@ -58,7 +58,7 @@ public class GameScreen implements Screen
     private void spawnBullet(){
         Rectangle raindrop = new Rectangle();
         raindrop.x = ResourceLoader.player.getX() + (ResourceLoader.player.getWidth() / 2) - (ResourceLoader.Bullet.getWidth() / 2);
-        raindrop.y = 192;
+        raindrop.y = 64;
         raindrop.width = 64;
         raindrop.height = 64;
         ResourceLoader.raindrops.add(raindrop);
@@ -72,7 +72,7 @@ public class GameScreen implements Screen
         Iterator<Rectangle> iter = ResourceLoader.raindrops.iterator();
         while (iter.hasNext()){
             Rectangle raindrop = iter.next();
-            raindrop.y += 1000* Gdx.graphics.getDeltaTime();
+            raindrop.y += 700 * Gdx.graphics.getDeltaTime();
 
 
         }
