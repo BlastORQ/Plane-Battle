@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import ua.pp.blastorq.planebattle.Bill;
 import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.actors.Background;
 import ua.pp.blastorq.planebattle.actors.Button;
@@ -23,7 +24,7 @@ import ua.pp.blastorq.planebattle.loader.ResourceLoader;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
 
 
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen implements Screen, Bill {
     public static float SCR_WIDTH = Gdx.graphics.getWidth(), SCR_HEIGHT = Gdx.graphics.getHeight();
     BitmapFont font;
     //Music music;
@@ -150,12 +151,12 @@ public class MainMenuScreen implements Screen {
         cancel.addListener(new ClickListener() {
                                @Override
                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                                   Gdx.app.log("sd", "Sd");
                                    return super.touchDown(event, x, y, pointer, button);
                                }
 
                                @Override
                                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                                   pb.getB().OnClick();
                                    super.touchUp(event, x, y, pointer, button);
                                }
                            }
@@ -192,4 +193,8 @@ public class MainMenuScreen implements Screen {
 
     }
 
+    @Override
+    public void OnClick() {
+
+    }
 }

@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/GdxTheme" >
         <activity
-            android:name="ua.pp.blastorq.planebattle.MainActivity"
+            android:name="ua.pp.blastorq.planebattle.AndroidLauncher"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
