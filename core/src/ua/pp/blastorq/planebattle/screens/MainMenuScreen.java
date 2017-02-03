@@ -64,7 +64,7 @@ public class MainMenuScreen implements Screen, Bill {
         off = new Off(cancelmusic, startButton.getX() + 10, startButton.getY() - 10 - offmusicbutton.getHeight() + 5, cancelmusic.getWidth(), cancelmusic.getHeight());
         onb = new On(on, startButton.getX() + 10, startButton.getY() - 10 - offmusicbutton.getHeight() + 5, cancelmusic.getWidth(), cancelmusic.getHeight());
         button = new Button(offmusicbutton, offMusicButton.getX() + offmusicbutton.getWidth() + 10, offMusicButton.getY(), offmusicbutton.getWidth(), offmusicbutton.getHeight());
-        canc = new Texture("cancel-music.png");
+        canc = new Texture("no-ads-icon.png");
         cancel = new Cancel(canc, button.getX(), button.getY(), canc.getWidth(), canc.getHeight());
         stage.addActor(startButton);
         stage.addActor(offMusicButton);
@@ -81,6 +81,7 @@ public class MainMenuScreen implements Screen, Bill {
         int midPointX = (int) (gameWidth / 2);
         SCR_WIDTH = gameWidth;
         SCR_HEIGHT = gameHeight;
+        Listener();
     }
     @Override
     public void show() {
@@ -100,7 +101,6 @@ public class MainMenuScreen implements Screen, Bill {
         batch.draw(player, (SCR_WIDTH / 2) - (player.getWidth() / 2), 0);
         font.draw(batch, "PLAY", (SCR_WIDTH / 2) - (playbutton.getWidth() / 2) + 50, (SCR_HEIGHT / 2) - (playbutton.getHeight() / 2) + 155);
         batch.end();
-        Listener();
         movHandler.update(delta);
     }
     private void Listener() {
@@ -112,7 +112,7 @@ public class MainMenuScreen implements Screen, Bill {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                pb.setScreen(new GameScreen(pb));
+                pb.setScreen(new GameScreen());
                 ResourceLoader.menu.stop();
                 super.touchUp(event, x, y, pointer, button);
             }
@@ -151,12 +151,17 @@ public class MainMenuScreen implements Screen, Bill {
         cancel.addListener(new ClickListener() {
                                @Override
                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                   pb.getB().OnClick();
                                    return super.touchDown(event, x, y, pointer, button);
                                }
 
                                @Override
                                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                                   pb.getB().OnClick();
+                                   if (!pb.getDesktop()) {
+                                       pb.getB().OnClick();
+                                   } else {
+                                       Gdx.app.log("Desktop", "RUN");
+                                   }
                                    super.touchUp(event, x, y, pointer, button);
                                }
                            }

@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.loader.ResourceLoader;
 import ua.pp.blastorq.planebattle.objects.Background;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
@@ -22,7 +21,8 @@ public class GameScreen implements Screen
     Background frontBackground, backBackground;
     OrthographicCamera camera;
     private MovHandler movHandler;
-    public GameScreen(PlaneBattle pb) {
+
+    public GameScreen() {
         movHandler = new MovHandler(0, -100);
         initGameObjects();
         float screenWidth = Gdx.graphics.getWidth();
@@ -134,8 +134,6 @@ public class GameScreen implements Screen
         if (Gdx.input.justTouched() && ResourceLoader.ismiddle) {
             spawnBullet();
         }
-        //ResourceLoader.batch.setProjectionMatrix(camera.combined);
-        //camera.update();
         ResourceLoader.batch.begin();
         ResourceLoader.batch.draw(ResourceLoader.background, ResourceLoader.frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth(), frontBackground.getHeight());
         ResourceLoader.batch.draw(ResourceLoader.background, backBackground.getX(), backBackground.getY(), backBackground.getWidth(), backBackground.getHeight());
@@ -145,8 +143,6 @@ public class GameScreen implements Screen
         drawPlayer();
         ResourceLoader.batch.draw(ResourceLoader.playerShip1, (MainMenuScreen.SCR_WIDTH / 2) - (ResourceLoader.playerShip1.getWidth() / 2), 440, 64, 64);
         ResourceLoader.batch.end();
-
-        //drawStage();
     }
     public void Listener() {
         ResourceLoader.LeftButton.addListener(new ClickListener()

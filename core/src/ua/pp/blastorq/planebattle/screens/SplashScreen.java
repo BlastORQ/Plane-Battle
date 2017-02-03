@@ -24,10 +24,10 @@ public class SplashScreen implements Screen{
     private Sprite sprite ,logo;
     private PlaneBattle game;
     private Screen nextScreen;
-
     public SplashScreen(PlaneBattle game, Screen nextScreen) {
         this.game = game;
         this.nextScreen = nextScreen;
+
     }
 
     @Override

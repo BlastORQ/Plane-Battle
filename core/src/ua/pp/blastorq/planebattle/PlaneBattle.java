@@ -7,24 +7,24 @@ import ua.pp.blastorq.planebattle.screens.MainMenuScreen;
 import ua.pp.blastorq.planebattle.screens.SplashScreen;
 
 public class PlaneBattle extends Game {
-	ResourceLoader loader;
-	Bill b;
+	public ResourceLoader loader;
+	private Bill b;
+	private boolean isDesktop;
 
-	public PlaneBattle(Bill bill) {
+	public PlaneBattle(Bill bill, boolean isDesktop) {
 		this.b = bill;
+		this.isDesktop = isDesktop;
+
 	}
 
+	public PlaneBattle(boolean isDesktop) {
+		this.isDesktop = isDesktop;
+	}
 	@Override
 	public void create() {
-		this.setScreen(new SplashScreen(this, new MainMenuScreen(this)));
-		loader = new ResourceLoader();
 		loader.load();
+		this.setScreen(new SplashScreen(this, new MainMenuScreen(this)));
 	}
-
-	public Bill getB() {
-		return b;
-	}
-
 	@Override
 	public void render() {
 		super.render();
@@ -32,5 +32,13 @@ public class PlaneBattle extends Game {
 	@Override
 	public void dispose() {
 		super.dispose();
+	}
+
+	public Bill getB() {
+		return b;
+	}
+
+	public boolean getDesktop() {
+		return isDesktop;
 	}
 }

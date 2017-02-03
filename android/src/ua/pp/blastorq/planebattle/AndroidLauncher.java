@@ -10,15 +10,23 @@ import android.os.IBinder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import ua.pp.blastorq.planebattle.loader.ResourceLoader;
 
 public class AndroidLauncher extends AndroidApplication implements Bill {
 	final String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiR7MLe+wtDcps8/q4xOTSX6SW2OH+jTEfyzCRMaUL1bpF54ChF6zHAT+ef3+Gyu25fGBvTuL2/QNaPBzEQG5Tg9+QNZkw8azQ0YiK00AbHWJh84vFvbvv6ygVnjpdRZ+AwRLyIUG+go8PDo2uQYZMkuaKPzULiuusVIVOGlmBB1v8odz9uy0EInaQzF3ndpbyd0mT/zwSeG/3CQAaQKXBx2xBoUqrbraI9xnsdbkhr4kUPPvohhvKzoT2Iy3WONOBhYWq0r0wa43chGZQ1tdfoTjZiUC72y14a7sUvd4yI0MkwqSCF3Ea883u+azcxSVlvUVukvW0P2awy/M71YZ+QIDAQAB";
@@ -27,20 +35,36 @@ public class AndroidLauncher extends AndroidApplication implements Bill {
 	Bill bill;
 	AndroidApplicationConfiguration cfg;
 	IInAppBillingService mService;
+	Preferences prefs = Gdx.app.getPreferences("noads");
 	ServiceConnection connection;
 	Button btn;
 	String inAppId = "ua.pp.blastorq.planebattle.removeads";
 	String removeAdPrice;
+	ResourceLoader loader;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		loader.load();
 		a();
 		cfg = new AndroidApplicationConfiguration();
-
 		layout = new RelativeLayout(this);
-		gameView = initializeForView(new PlaneBattle(this), cfg);
+		gameView = initializeForView(new PlaneBattle(this, false), cfg);
 		layout.addView(gameView);
+		//if(!prefs.getBoolean("noads", true)){
+		AdView adView;
+		adView = new AdView(this);
+		adView.setAdSize(AdSize.SMART_BANNER);
+		adView.setAdUnitId("ca-app-pub-3418075909647949/3192256714");
+		AdRequest.Builder builder = new AdRequest.Builder();
+		builder.addTestDevice("");
+		RelativeLayout.LayoutParams adParams = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		layout.addView(adView, adParams);
+		adView.loadAd(builder.build());
+		//	}
 		setContentView(layout);
 	}
 
@@ -50,7 +74,6 @@ public class AndroidLauncher extends AndroidApplication implements Bill {
 			public void onServiceConnected(ComponentName name, IBinder service) {
 				mService = IInAppBillingService.Stub.asInterface(service);
 			}
-
 			@Override
 			public void onServiceDisconnected(ComponentName name) {
 				mService = null;
@@ -77,7 +100,6 @@ public class AndroidLauncher extends AndroidApplication implements Bill {
 			if (response == 0) {
 				ArrayList<String> responseList
 						= skuDetails.getStringArrayList("DETAILS_LIST");
-
 				for (String thisResponse : responseList) {
 					JSONObject object = new JSONObject(thisResponse);
 					String sku = object.getString("productId");
@@ -109,6 +131,9 @@ public class AndroidLauncher extends AndroidApplication implements Bill {
 				try {
 					JSONObject jo = new JSONObject(purchaseData);
 					String sku = jo.getString("productId");
+					prefs.putBoolean("noads", true);
+					prefs.flush();
+					Toast.makeText(this, "Thanks for purchasing", Toast.LENGTH_LONG).show();
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -129,5 +154,3 @@ public class AndroidLauncher extends AndroidApplication implements Bill {
 		clicked();
 	}
 }
-
-
