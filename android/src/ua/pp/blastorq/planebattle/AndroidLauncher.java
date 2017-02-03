@@ -46,7 +46,7 @@ public class AndroidLauncher extends AndroidApplication implements Bill {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		loader.load();
-		a();
+		someInitialize();
 		cfg = new AndroidApplicationConfiguration();
 		layout = new RelativeLayout(this);
 		gameView = initializeForView(new PlaneBattle(this, false), cfg);
@@ -68,7 +68,7 @@ public class AndroidLauncher extends AndroidApplication implements Bill {
 		setContentView(layout);
 	}
 
-	protected void a() {
+	protected void someInitialize() {
 		connection = new ServiceConnection() {
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
