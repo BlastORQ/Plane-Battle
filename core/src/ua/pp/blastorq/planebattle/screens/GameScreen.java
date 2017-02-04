@@ -55,14 +55,6 @@ public class GameScreen implements Screen
         frontBackground = movHandler.getFrontBackground();
         backBackground = movHandler.getBackBackground();
     }
-    private void spawnBullet(){
-        Rectangle raindrop = new Rectangle();
-        raindrop.x = ResourceLoader.player.getX() + (ResourceLoader.player.getWidth() / 2) - (ResourceLoader.Bullet.getWidth() / 2);
-        raindrop.y = 64;
-        raindrop.width = 64;
-        raindrop.height = 64;
-        ResourceLoader.raindrops.add(raindrop);
-    }
     public void drawBullet(){
         for (Rectangle raindrop : ResourceLoader.raindrops) {
             ResourceLoader.batch.begin();
@@ -78,52 +70,19 @@ public class GameScreen implements Screen
         }
     }
     private void handleInput(final float dt){
-        if (Math.abs(ResourceLoader.accel) >= 0.07) {
-            ResourceLoader.accel /= 1.8;
-        } else {
-            ResourceLoader.accel = 0;
-        }
-        if (ResourceLoader.player != null) {
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || ResourceLoader.isLeft) {
-                ResourceLoader.accel -= 0.09;
-                if (ResourceLoader.accel < -2) {
-                    ResourceLoader.accel = -2;
-                }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || ResourceLoader.isRight) {
-                ResourceLoader.accel += 0.09;
-                if (ResourceLoader.accel > 2) {
-                    ResourceLoader.accel = 2;
-                }
+        ResourceLoader.player.render(dt);
+        if (Gdx.input.isTouched()) {
+            ResourceLoader.touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            ResourceLoader.camera.unproject(ResourceLoader.touchPos);
+            float touchX = (ResourceLoader.touchPos.x + 1) / 2 * Gdx.graphics.getWidth();
+
+            if(touchX <= Gdx.graphics.getWidth()/3){
+                ResourceLoader.player.left();
+            }else if(touchX <= Gdx.graphics.getWidth()*2/3){
+                ResourceLoader.player.shot();
+            }else if(touchX > Gdx.graphics.getWidth()*2/3){
+                ResourceLoader.player.right();
             }
-            ResourceLoader.player.setPosition(ResourceLoader.player.getX() + (300 * 10 * ResourceLoader.accel * dt), ResourceLoader.player.getY());
-            if (ResourceLoader.player.getX() < 0) {
-                ResourceLoader.accel *= -0.9;
-                ResourceLoader.player.setPosition(0, ResourceLoader.player.getY());
-            } else if (ResourceLoader.player.getX() + ResourceLoader.playerShip.getWidth() > Gdx.graphics.getWidth()) {
-                ResourceLoader.accel *= -0.9;
-                ResourceLoader.player.setPosition(Gdx.graphics.getWidth() - 64 - 1, ResourceLoader.player.getY());
-            }
-            if (Gdx.input.isTouched()) {
-                ResourceLoader.touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                ResourceLoader.camera.unproject(ResourceLoader.touchPos);
-                float touchX = (ResourceLoader.touchPos.x + 1) / 2 * Gdx.graphics.getWidth();
-                if(touchX <= Gdx.graphics.getWidth()/3){
-                    ResourceLoader.isLeft = true;
-                }else if(touchX <= Gdx.graphics.getWidth()*2/3){
-                    ResourceLoader.ismiddle = true;
-                }
-                else if(touchX > Gdx.graphics.getWidth()*2/3){
-                    ResourceLoader.isRight = true;
-                }
-            } else {
-                ResourceLoader.ismiddle = false;
-                ResourceLoader.isRight = false;
-                ResourceLoader.isLeft = false;
-            }
-        } else {
-            ResourceLoader.ismiddle = false;
-            ResourceLoader.isRight = false;
-            ResourceLoader.isLeft = false;
         }
     }
     @Override
@@ -132,7 +91,7 @@ public class GameScreen implements Screen
         Listener();
         movHandler.update(delta);
         if (Gdx.input.justTouched() && ResourceLoader.ismiddle) {
-            spawnBullet();
+
         }
         ResourceLoader.batch.begin();
         ResourceLoader.batch.draw(ResourceLoader.background, ResourceLoader.frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth(), frontBackground.getHeight());
