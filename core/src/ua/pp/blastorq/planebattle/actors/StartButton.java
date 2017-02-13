@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class StartButton extends Actor {
-    Texture image;
+    private Texture image;
     private float x, y, width, height;
 
     public StartButton(Texture image, float x, float y, float width, float height) {

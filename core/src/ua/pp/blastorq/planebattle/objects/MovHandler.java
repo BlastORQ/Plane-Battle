@@ -4,35 +4,32 @@ package ua.pp.blastorq.planebattle.objects;
 import com.badlogic.gdx.Gdx;
 
 public class MovHandler {
-    private Background frontBackground, backBackground;
+    private MovingBackground frontMovingBackground, backMovingBackground;
 
     public MovHandler(float yPos, int MOV_SPEED) {
-        frontBackground = new Background(0, yPos, Gdx.graphics.getWidth() + 150, Gdx.graphics.getHeight() + 150, MOV_SPEED);
-        backBackground = new Background(0, frontBackground.getTailY(), Gdx.graphics.getWidth() + 150, Gdx.graphics.getHeight() + 150, MOV_SPEED);
+        frontMovingBackground = new MovingBackground(0, yPos, Gdx.graphics.getWidth() + 150, Gdx.graphics.getHeight() + 150, MOV_SPEED);
+        backMovingBackground = new MovingBackground(0, frontMovingBackground.getTailY(), Gdx.graphics.getWidth() + 150, Gdx.graphics.getHeight() + 150, MOV_SPEED);
 
     }
 
     public void update(float delta) {
-        frontBackground.update(delta);
-        backBackground.update(delta);
-        if (frontBackground.isScrolledLeft()) {
-            frontBackground.reset(backBackground.getTailY());
-        } else if (backBackground.isScrolledLeft()) {
-            backBackground.reset(frontBackground.getTailY());
+        frontMovingBackground.update(delta);
+        backMovingBackground.update(delta);
+        if (frontMovingBackground.isScrolledLeft()) {
+            frontMovingBackground.reset(backMovingBackground.getTailY());
+        } else if (backMovingBackground.isScrolledLeft()) {
+            backMovingBackground.reset(frontMovingBackground.getTailY());
         }
     }
 
-    public Background getFrontBackground() {
-        return frontBackground;
+    public MovingBackground getFrontMovingBackground() {
+        return frontMovingBackground;
     }
 
-    public Background getBackBackground() {
-        return backBackground;
+    public MovingBackground getBackMovingBackground() {
+        return backMovingBackground;
     }
 
-    private void stop() {
-        frontBackground.stop();
-        backBackground.stop();
-    }
+
 }
 

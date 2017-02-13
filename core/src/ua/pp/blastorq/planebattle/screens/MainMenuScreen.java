@@ -10,62 +10,54 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
+import ua.pp.blastorq.planebattle.loader.ResourceLoader;
 import ua.pp.blastorq.planebattle.Bill;
 import ua.pp.blastorq.planebattle.PlaneBattle;
-import ua.pp.blastorq.planebattle.actors.Background;
 import ua.pp.blastorq.planebattle.actors.Button;
 import ua.pp.blastorq.planebattle.actors.Cancel;
 import ua.pp.blastorq.planebattle.actors.Off;
 import ua.pp.blastorq.planebattle.actors.OffMusicButton;
 import ua.pp.blastorq.planebattle.actors.On;
 import ua.pp.blastorq.planebattle.actors.StartButton;
-import ua.pp.blastorq.planebattle.loader.ResourceLoader;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
-
+import ua.pp.blastorq.planebattle.objects.MovingBackground;
 
 public class MainMenuScreen implements Screen, Bill {
-    public static float SCR_WIDTH = Gdx.graphics.getWidth(), SCR_HEIGHT = Gdx.graphics.getHeight();
-    BitmapFont font;
-    //Music music;
-    boolean volume;
-    ua.pp.blastorq.planebattle.objects.Background frontBackground, backBackground;
-    MovHandler movHandler;
-    Button button;
+    static float SCR_WIDTH = Gdx.graphics.getWidth(), SCR_HEIGHT = Gdx.graphics.getHeight();
+    private BitmapFont font;
+    private MovingBackground frontBackground, backBackground;
+    private MovHandler movHandler;
     private PlaneBattle pb;
-    private Texture playbutton, bg, offmusicbutton, cancelmusic, player, on;
+    private Texture PlayButton;
+    private Texture bg;
+    private Texture player;
     private SpriteBatch batch;
-    private Viewport viewport;
     private Stage stage;
-    private Background background;
-    private OffMusicButton offMusicButton;
     private StartButton startButton;
     private Off off;
     private On onb;
     private Cancel cancel;
-    private Texture canc;
     public MainMenuScreen(PlaneBattle planeBattle){
         this.pb = planeBattle;
         movHandler = new MovHandler(0, -20);
-        frontBackground = movHandler.getFrontBackground();
-        backBackground = movHandler.getBackBackground();
-        on = new Texture("volume-control.png");
-        playbutton = new Texture("start.png");
+        frontBackground = movHandler.getFrontMovingBackground();
+        backBackground = movHandler.getBackMovingBackground();
+        Texture on = new Texture("volume-control.png");
+        PlayButton = new Texture("start.png");
         player = new Texture("Plane.png");
         batch = new SpriteBatch();
         bg = new Texture("bg.png");
-        viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Viewport viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport);
-        startButton = new StartButton(playbutton, (SCR_WIDTH / 2) - (playbutton.getWidth() / 2), (SCR_HEIGHT / 2) - (playbutton.getHeight() / 2) + 50, playbutton.getWidth(), playbutton.getHeight());
-        background = new Background(bg, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        offmusicbutton = new Texture("btn.png");
-        offMusicButton = new OffMusicButton(offmusicbutton, startButton.getX(), startButton.getY() - 10 - offmusicbutton.getHeight(), offmusicbutton.getWidth(), offmusicbutton.getHeight());
-        cancelmusic = new Texture("volume-adjustment-mute.png");
-        off = new Off(cancelmusic, startButton.getX() + 10, startButton.getY() - 10 - offmusicbutton.getHeight() + 5, cancelmusic.getWidth(), cancelmusic.getHeight());
-        onb = new On(on, startButton.getX() + 10, startButton.getY() - 10 - offmusicbutton.getHeight() + 5, cancelmusic.getWidth(), cancelmusic.getHeight());
-        button = new Button(offmusicbutton, offMusicButton.getX() + offmusicbutton.getWidth() + 10, offMusicButton.getY(), offmusicbutton.getWidth(), offmusicbutton.getHeight());
-        canc = new Texture("no-ads-icon.png");
-        cancel = new Cancel(canc, button.getX(), button.getY(), canc.getWidth(), canc.getHeight());
+        startButton = new StartButton(PlayButton, (SCR_WIDTH / 2) - (PlayButton.getWidth() / 2), (SCR_HEIGHT / 2) - (PlayButton.getHeight() / 2) + 50, PlayButton.getWidth(), PlayButton.getHeight());
+        Texture OffMusicButton = new Texture("btn.png");
+        OffMusicButton offMusicButton = new OffMusicButton(OffMusicButton, startButton.getX(), startButton.getY() - 10 - OffMusicButton.getHeight(), OffMusicButton.getWidth(), OffMusicButton.getHeight());
+        Texture CancelMusic = new Texture("volume-adjustment-mute.png");
+        off = new Off(CancelMusic, startButton.getX() + 10, startButton.getY() - 10 - OffMusicButton.getHeight() + 5, CancelMusic.getWidth(), CancelMusic.getHeight());
+        onb = new On(on, startButton.getX() + 10, startButton.getY() - 10 - OffMusicButton.getHeight() + 5, CancelMusic.getWidth(), CancelMusic.getHeight());
+        Button button = new Button(OffMusicButton, offMusicButton.getX() + OffMusicButton.getWidth() + 10, offMusicButton.getY(), OffMusicButton.getWidth(), OffMusicButton.getHeight());
+        Texture CancelImage = new Texture("no-ads-icon.png");
+        cancel = new Cancel(CancelImage, button.getX(), button.getY(), CancelImage.getWidth(), CancelImage.getHeight());
         stage.addActor(startButton);
         stage.addActor(offMusicButton);
         stage.addActor(off);
@@ -77,8 +69,6 @@ public class MainMenuScreen implements Screen, Bill {
         float screenHeight = Gdx.graphics.getHeight();
         float gameWidth = 136;
         float gameHeight = screenHeight / (screenWidth / gameWidth);
-        int midPointY = (int) (gameHeight / 2);
-        int midPointX = (int) (gameWidth / 2);
         SCR_WIDTH = gameWidth;
         SCR_HEIGHT = gameHeight;
         Listener();
@@ -99,7 +89,7 @@ public class MainMenuScreen implements Screen, Bill {
         stage.draw();
         batch.begin();
         batch.draw(player, (SCR_WIDTH / 2) - (player.getWidth() / 2), 0);
-        font.draw(batch, "PLAY", (SCR_WIDTH / 2) - (playbutton.getWidth() / 2) + 50, (SCR_HEIGHT / 2) - (playbutton.getHeight() / 2) + 155);
+        font.draw(batch, "PLAY", (SCR_WIDTH / 2) - (PlayButton.getWidth() / 2) + 50, (SCR_HEIGHT / 2) - (PlayButton.getHeight() / 2) + 155);
         batch.end();
         movHandler.update(delta);
     }
@@ -149,27 +139,17 @@ public class MainMenuScreen implements Screen, Bill {
                         }
         );
         cancel.addListener(new ClickListener() {
-                               @Override
-                               public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                                   pb.getB().OnClick();
-                                   return super.touchDown(event, x, y, pointer, button);
-                               }
-
-                               @Override
-                               public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                                   if (!pb.getDesktop()) {
-                                       pb.getB().OnClick();
-                                   } else {
-                                       Gdx.app.log("Desktop", "RUN");
-                                   }
-                                   super.touchUp(event, x, y, pointer, button);
-                               }
-                           }
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            if (!pb.getDesktop()) {
+                pb.getB().OnClick();
+             } else {
+                 Gdx.app.log("Desktop", "RUN");
+            }
+                super.touchUp(event, x, y, pointer, button);
+             }
+        }
         );
-    }
-
-    public Cancel getCancel() {
-        return cancel;
     }
     @Override
     public void resize(int width, int height) {

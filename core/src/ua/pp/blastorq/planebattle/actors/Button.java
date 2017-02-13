@@ -17,15 +17,6 @@ public class Button extends Actor {
         setBounds(x, y, width, height);
 
     }
-
-    public Texture getImage() {
-        return image;
-    }
-
-    public void setImage(Texture image) {
-        this.image = image;
-    }
-
     @Override
     public float getX() {
         return x;

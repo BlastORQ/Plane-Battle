@@ -1,6 +1,4 @@
 package ua.pp.blastorq.planebattle.screens;
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,13 +13,11 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.tools.SpriteAccessor;
-
 public class SplashScreen implements Screen{
 
-    Texture f;
     private TweenManager manager;
     private SpriteBatch batch;
-    private Sprite sprite ,logo;
+    private Sprite sprite;
     private PlaneBattle game;
     private Screen nextScreen;
     public SplashScreen(PlaneBattle game, Screen nextScreen) {
@@ -32,18 +28,12 @@ public class SplashScreen implements Screen{
 
     @Override
     public void show() {
-        f = new Texture("logo.png");
-        logo = new Sprite(f);
-
+        Texture f = new Texture("logo.png");
+        Sprite logo = new Sprite(f);
         sprite = new Sprite(logo);
         sprite.setColor(1, 1, 0, 0);
-
-
-        float width = Gdx.graphics.getWidth();
-
         sprite.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         sprite.setPosition(0 , 0);
-
         setupTween();
         batch = new SpriteBatch();
 
