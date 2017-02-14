@@ -17,9 +17,9 @@ public class Plane extends Sprite {
     }
 
     private void _calculateBot(){
-        if(Math.random()<0.3){
+        if(Math.random()<0.2){
             this.left();
-        }else if(Math.random()<0.3){
+        }else if(Math.random()<0.2){
             this.right();
         }else if(Math.random()<0.1){
             this.shot();

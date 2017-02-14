@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,7 +19,7 @@ import ua.pp.blastorq.planebattle.sprite.Plane;
 public class ResourceLoader {
     private static Texture background;
     private static Texture Bullet;
-
+    public static BitmapFont font;
     public static Music menu;
     public static OrthographicCamera camera = new OrthographicCamera();
     public static Plane player;
@@ -38,6 +39,7 @@ public class ResourceLoader {
 
     public static Texture getBullet(){ return Bullet;}
     public void load(){
+        font = new BitmapFont(Gdx.files.internal("font/myfont.fnt"));
         MovHandler movHandler = new MovHandler(0, -100);
         frontMovingBackground = movHandler.getFrontMovingBackground();
         background = new Texture("bg.png");
