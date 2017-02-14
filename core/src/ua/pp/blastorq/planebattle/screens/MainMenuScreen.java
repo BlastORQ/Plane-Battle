@@ -88,7 +88,7 @@ public class MainMenuScreen implements Screen, Bill {
         stage.act(delta);
         stage.draw();
         batch.begin();
-        batch.draw(player, (SCR_WIDTH / 2) - (player.getWidth() / 2), 0);
+        batch.draw(ResourceLoader.player, (SCR_WIDTH / 2) - (player.getWidth() / 2), 0);
         font.draw(batch, "PLAY", (SCR_WIDTH / 2) - (PlayButton.getWidth() / 2) + 50, (SCR_HEIGHT / 2) - (PlayButton.getHeight() / 2) + 155);
         batch.end();
         movHandler.update(delta);
