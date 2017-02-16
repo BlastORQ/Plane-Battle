@@ -5,13 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import ua.pp.blastorq.planebattle.loader.ResourceLoader;
+import ua.pp.blastorq.planebattle.loader.data;
 
 public class Bullets extends Array<Bullet> {
-    private long lastAddPlayer, lastAddBot;
+    public long lastAddPlayer, lastAddBot;
     public void render(){
         for (Bullet bullet : this) {
-            ResourceLoader.batch.draw(ResourceLoader.getBullet(), bullet.x, bullet.y, 64, 64);
+            data.batch.draw(data.getBulletTexture(), bullet.x, bullet.y, 64, 64);
             bullet.calculate(Gdx.graphics.getDeltaTime());
         }
     }

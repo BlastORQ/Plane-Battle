@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import ua.pp.blastorq.planebattle.loader.ResourceLoader;
+import ua.pp.blastorq.planebattle.loader.data;
 import ua.pp.blastorq.planebattle.Bill;
 import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.actors.Button;
@@ -76,7 +76,7 @@ public class MainMenuScreen implements Screen, Bill {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        ResourceLoader.menu.play();
+        data.menuAudio.play();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class MainMenuScreen implements Screen, Bill {
         stage.act(delta);
         stage.draw();
         batch.begin();
-        batch.draw(ResourceLoader.player, (SCR_WIDTH / 2) - (player.getWidth() / 2), 0);
+        batch.draw(data.player, (SCR_WIDTH / 2) - (player.getWidth() / 2), 0);
         font.draw(batch, "PLAY", (SCR_WIDTH / 2) - (PlayButton.getWidth() / 2) + 50, (SCR_HEIGHT / 2) - (PlayButton.getHeight() / 2) + 155);
         batch.end();
         movHandler.update(delta);
@@ -103,7 +103,7 @@ public class MainMenuScreen implements Screen, Bill {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 pb.setScreen(new GameScreen());
-                ResourceLoader.menu.stop();
+                data.menuAudio.stop();
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -116,7 +116,7 @@ public class MainMenuScreen implements Screen, Bill {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                ResourceLoader.menu.pause();
+                data.menuAudio.pause();
 
                 off.remove();
                 stage.addActor(onb);
@@ -131,7 +131,7 @@ public class MainMenuScreen implements Screen, Bill {
 
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                                ResourceLoader.menu.play();
+                                data.menuAudio.play();
                                 onb.remove();
                                 stage.addActor(off);
                                 super.touchUp(event, x, y, pointer, button);

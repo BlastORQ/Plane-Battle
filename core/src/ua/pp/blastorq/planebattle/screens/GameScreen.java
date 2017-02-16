@@ -3,7 +3,7 @@ package ua.pp.blastorq.planebattle.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
-import ua.pp.blastorq.planebattle.loader.ResourceLoader;
+import ua.pp.blastorq.planebattle.loader.data;
 import ua.pp.blastorq.planebattle.objects.MovingBackground;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
 import ua.pp.blastorq.planebattle.sprite.Bullets;
@@ -20,28 +20,29 @@ class GameScreen implements Screen
         movHandler = new MovHandler(0, -100);
         frontMovingBackground = movHandler.getFrontMovingBackground();
         backMovingBackground = movHandler.getBackMovingBackground();
-        bullets = ResourceLoader.bullets;
-        player = ResourceLoader.player;
-        bot = ResourceLoader.bot;
+        bullets = data.bullets;
+        player = data.player;
+        bot = data.bot;
 
-        player.setPosition((Gdx.graphics.getWidth() / 2) - (player.getWidth() / 2), 0);
-        player.setSize(64, 64);
+        player.setSize(64*data.scale, 64*data.scale);
+        player.setPosition((data.vw - player.getWidth()) / 2, 0);
 
-        bot.setPosition((Gdx.graphics.getWidth() / 2) - (bot.getWidth() / 2), 440);
-        bot.setSize(64, 64);
+        bot.setSize(64*data.scale, 64*data.scale);
+        bot.setPosition((data.vw - bot.getWidth()) / 2, data.vh-160-(64*data.scale));
     }
     private void handleInput(){
         if (Gdx.input.isTouched()) {
-            ResourceLoader.touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            ResourceLoader.camera.unproject(ResourceLoader.touchPos);
-            float touchX = (ResourceLoader.touchPos.x + 1) / 2 * Gdx.graphics.getWidth();
-            if(touchX <= Gdx.graphics.getWidth()/3){
+            data.touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            data.camera.unproject(data.touchPos);
+            float touchX = (data.touchPos.x + 1) / 2 * data.vw;
+            if(touchX < data.vw/3){
                 player.left();
-            }else if(touchX <= Gdx.graphics.getWidth()*2/3){
+            }else if(touchX < data.vw*2/3){
                 player.shot();
-            }else if(touchX > Gdx.graphics.getWidth()*2/3){
+            }else if(touchX > data.vw*2/3){
                 player.right();
             }
+            bot.canShut = true;
         }
     }
     @Override
@@ -50,21 +51,21 @@ class GameScreen implements Screen
         player.calculate(delta);
         bot.calculate(delta);
         movHandler.update(delta);
-        ResourceLoader.batch.begin();
-        ResourceLoader.batch.draw(ResourceLoader.getBackground(), ResourceLoader.getFrontMovingBackground().getX(), frontMovingBackground.getY(), frontMovingBackground.getWidth(), frontMovingBackground.getHeight());
-        ResourceLoader.batch.draw(ResourceLoader.getBackground(), backMovingBackground.getX(), backMovingBackground.getY(), backMovingBackground.getWidth(), backMovingBackground.getHeight());
+        data.batch.begin();
+        data.batch.draw(data.getBackgroundTexture(), data.getFrontMovingBackground().getX(), frontMovingBackground.getY(), frontMovingBackground.getWidth(), frontMovingBackground.getHeight());
+        data.batch.draw(data.getBackgroundTexture(), backMovingBackground.getX(), backMovingBackground.getY(), backMovingBackground.getWidth(), backMovingBackground.getHeight());
         bullets.render();
         player.render();
         bot.render();
-        ResourceLoader.batch.end();
+        data.batch.end();
     }
     @Override
     public void pause() {
     }
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(ResourceLoader.stage);
-        ResourceLoader.menu.stop();
+        Gdx.input.setInputProcessor(data.stage);
+        data.menuAudio.stop();
     }
     @Override
     public void resize(int width, int height) {

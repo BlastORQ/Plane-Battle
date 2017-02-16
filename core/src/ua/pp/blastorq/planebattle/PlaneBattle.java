@@ -1,24 +1,24 @@
 package ua.pp.blastorq.planebattle;
 
 import com.badlogic.gdx.Game;
-import ua.pp.blastorq.planebattle.loader.ResourceLoader;
+import ua.pp.blastorq.planebattle.loader.data;
 import ua.pp.blastorq.planebattle.screens.MainMenuScreen;
 import ua.pp.blastorq.planebattle.screens.SplashScreen;
 
 public class PlaneBattle extends Game {
-	private ResourceLoader loader;
+	private data loader;
 	private Bill b;
 	private boolean isDesktop;
 
 	 PlaneBattle(Bill bill, boolean isDesktop) {
 		this.b = bill;
 		this.isDesktop = isDesktop;
-		loader = new ResourceLoader();
+		loader = new data();
 	}
 
 	public PlaneBattle(boolean isDesktop) {
 		this.isDesktop = isDesktop;
-		loader = new ResourceLoader();
+		loader = new data();
 	}
 	@Override
 	public void create() {

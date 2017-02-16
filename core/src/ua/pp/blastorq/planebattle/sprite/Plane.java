@@ -4,24 +4,27 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import ua.pp.blastorq.planebattle.loader.ResourceLoader;
+import ua.pp.blastorq.planebattle.loader.data;
 
 public class Plane extends Sprite {
     private float acceleration = 0;
     private boolean isBot = false;
+    public boolean canShut;
 
     public Plane(Texture texture, boolean bot) {
         super(texture);
         setPosition((Gdx.graphics.getWidth() /2) - (getWidth()/2), 64);
         this.isBot = bot;
+        this.canShut = !bot;
     }
 
     private void _calculateBot(){
-        if(Math.random()<0.3){
+        if(data.bot.getX() > data.player.getX() && Math.random()<0.4){
             this.left();
-        }else if(Math.random()<0.3){
+        }else if(data.bot.getX() < data.player.getX() && Math.random()<0.4){
             this.right();
-        }else if(Math.random()<0.1){
+        }
+        if(this.canShut && Math.random()<0.02){
             this.shot();
         }
     }
@@ -39,11 +42,11 @@ public class Plane extends Sprite {
     }
     public void shot(){
         Bullet bullet = new Bullet(
-            this.getX() + (this.getWidth() / 2) - (ResourceLoader.player.getWidth() / 2),
+            this.getX() + 32,
             this.getY(),
             this.isBot ? 1 : -1
         );
-        ResourceLoader.bullets.append(bullet, this.isBot);
+        data.bullets.append(bullet, this.isBot);
     }
     public void calculate(float dt){
         if(this.isBot){
@@ -59,12 +62,12 @@ public class Plane extends Sprite {
         if (this.getX() < 0) {
             this.acceleration *= -0.9;
             this.setPosition(0, this.getY());
-        } else if (this.getX() + this.getWidth() > Gdx.graphics.getWidth()) {
+        } else if (this.getX() > data.vw - this.getWidth() - 1) {
             this.acceleration *= -0.9;
-            this.setPosition(Gdx.graphics.getWidth() - 64 - 1, this.getY());
+            this.setPosition(data.vw - this.getWidth() - 1, this.getY());
         }
     }
     public void render(){
-        this.draw(ResourceLoader.batch);
+        this.draw(data.batch);
     }
 }
