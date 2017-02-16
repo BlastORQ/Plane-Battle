@@ -27,7 +27,7 @@ public class MainMenuScreen implements Screen, Bill {
     private MovingBackground frontBackground, backBackground;
     private MovHandler movHandler;
     private PlaneBattle pb;
-    private Texture t_bg, t_start, t_plane, t_unmute, t_btn, t_mute, t_noads;
+    private Texture t_bg, t_start, t_unmute, t_btn, t_mute, t_noads;
     private SpriteBatch batch;
     private Stage stage;
     private StartButton startButton;
@@ -43,7 +43,6 @@ public class MainMenuScreen implements Screen, Bill {
 
         t_unmute = new Texture("unmute.png");
         t_start = new Texture("start.png");
-        t_plane = new Texture("spacecraft.png");
         t_btn = new Texture("btn.png");
         t_bg = new Texture("bg.png");
         t_mute = new Texture("mute.png");
@@ -54,6 +53,7 @@ public class MainMenuScreen implements Screen, Bill {
         frontBackground = movHandler.getFrontMovingBackground();
         backBackground = movHandler.getBackMovingBackground();
 
+        //@TODO: Зробити якісь очевидніші цифри позицій
         startButton = new StartButton(t_start, (data.vw / 2) - (t_start.getWidth() / 2), (data.vh / 2) - (t_start.getHeight() / 2) + 50, t_start.getWidth(), t_start.getHeight());
 
         btn_bg_mute = new OffMusicButton(t_btn, startButton.getX(), startButton.getY() - 10 - t_btn.getHeight(), t_btn.getWidth(), t_btn.getHeight());
