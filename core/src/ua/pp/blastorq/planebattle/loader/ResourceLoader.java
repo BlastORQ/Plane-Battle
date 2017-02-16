@@ -6,12 +6,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.objects.MovingBackground;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
 import ua.pp.blastorq.planebattle.sprite.Bullets;
@@ -30,13 +28,9 @@ public class ResourceLoader {
     public static Stage stage;
     public static Bullets bullets;
     public static Vector3 touchPos;
-    public static Rectangle bulletRectangle, botRectangle, playerRectangle;
+
     public static MovingBackground getFrontMovingBackground() {
         return frontMovingBackground;
-    }
-    PlaneBattle pb;
-    public ResourceLoader(PlaneBattle planeBattle){
-        this.pb = planeBattle;
     }
     public static Texture getBackground() {
         return background;
@@ -57,19 +51,11 @@ public class ResourceLoader {
         Bullet  = new Texture("bullet.png");
         batch = new SpriteBatch();
         stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
         player = new Plane(playerShip, false);
         player.flip(false, true);
         Gdx.input.setInputProcessor(stage);
         bot = new Plane(playerShip1, true);
-        bullets = new Bullets(pb);
-        bulletRectangle = new Rectangle();
-        botRectangle = new Rectangle();
-        playerRectangle = new Rectangle();
-        playerRectangle.width = 64;
-        playerRectangle.height  = 64;
-        botRectangle.width = 64;
-        botRectangle.height = 64;
-        bulletRectangle.width = 64;
-        bulletRectangle.height = 64;
+        bullets = new Bullets();
     }
 }
