@@ -4,22 +4,31 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.TimeUtils;
 
+import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.loader.ResourceLoader;
 import ua.pp.blastorq.planebattle.objects.MovingBackground;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
+import ua.pp.blastorq.planebattle.sprite.Bullet;
 import ua.pp.blastorq.planebattle.sprite.Bullets;
 import ua.pp.blastorq.planebattle.sprite.Plane;
 
 class GameScreen implements Screen
 {
     private Plane bot, player;
-    boolean start = false;
+    private boolean start = false;
     private Bullets bullets;
     private MovingBackground frontMovingBackground, backMovingBackground;
     private MovHandler movHandler;
     private BitmapFont font;
-    GameScreen() {
+    private Bullet bullet;
+    private Rectangle bulletRectangle, botRectangle, playerRectangle;
+    PlaneBattle pb;
+    private long lastAddPlayer, lastAddBot;
+    GameScreen(PlaneBattle pb) {
+        this.pb = pb;
         movHandler = new MovHandler(0, -100);
         frontMovingBackground = movHandler.getFrontMovingBackground();
         backMovingBackground = movHandler.getBackMovingBackground();
@@ -29,8 +38,11 @@ class GameScreen implements Screen
         font = ResourceLoader.font;
         player.setPosition((Gdx.graphics.getWidth() / 2) - (player.getWidth() / 2), 0);
         player.setSize(64, 64);
-        bot.setPosition((Gdx.graphics.getWidth() / 2) - (bot.getWidth() / 2), 440);
+        bot.setPosition((Gdx.graphics.getWidth() / 2) - (bot.getWidth() / 2), Gdx.graphics.getHeight() - 100);
         bot.setSize(64, 64);
+        bulletRectangle = ResourceLoader.bulletRectangle;
+        botRectangle = ResourceLoader.botRectangle;
+        playerRectangle  =ResourceLoader.playerRectangle;
     }
     private void handleInput(){
         if (Gdx.input.isTouched()) {
@@ -46,11 +58,15 @@ class GameScreen implements Screen
             }
         }
     }
+
     @Override
     public void render(float delta) {
+        makeCoordinates();
+        botRectangle.y = botRectangle.y +1;
+        playerRectangle.y = playerRectangle.y -1;
         if(Gdx.input.justTouched()){
             start = true;
-        }
+       }
         if(start) {
             handleInput();
             player.calculate(delta);
@@ -63,7 +79,7 @@ class GameScreen implements Screen
             player.render();
             bot.render();
             ResourceLoader.batch.end();
-        }else{
+      }else {
             ResourceLoader.batch.begin();
             ResourceLoader.batch.draw(ResourceLoader.getBackground(), ResourceLoader.getFrontMovingBackground().getX(), frontMovingBackground.getY(), frontMovingBackground.getWidth(), frontMovingBackground.getHeight());
             ResourceLoader.batch.draw(ResourceLoader.getBackground(), backMovingBackground.getX(), backMovingBackground.getY(), backMovingBackground.getWidth(), backMovingBackground.getHeight());
@@ -71,7 +87,14 @@ class GameScreen implements Screen
             player.render();
             bot.render();
             ResourceLoader.batch.end();
+            }
         }
+    private void makeCoordinates(){
+      playerRectangle.x = player.getX();
+      playerRectangle.y = player.getY();
+      botRectangle.x = bot.getX();
+      botRectangle.y =  bot.getY();
+
 
     }
     @Override

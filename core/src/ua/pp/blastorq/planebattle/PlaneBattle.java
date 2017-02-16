@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import ua.pp.blastorq.planebattle.loader.ResourceLoader;
 import ua.pp.blastorq.planebattle.screens.MainMenuScreen;
 import ua.pp.blastorq.planebattle.screens.SplashScreen;
+import ua.pp.blastorq.planebattle.sprite.Plane;
 
 public class PlaneBattle extends Game {
 	private ResourceLoader loader;
@@ -11,14 +12,14 @@ public class PlaneBattle extends Game {
 	private boolean isDesktop;
 
 	 PlaneBattle(Bill bill, boolean isDesktop) {
-		this.b = bill;
-		this.isDesktop = isDesktop;
-		loader = new ResourceLoader();
+		 this.b = bill;
+		 this.isDesktop = isDesktop;
+		 loader = new ResourceLoader(this);
 	}
 
 	public PlaneBattle(boolean isDesktop) {
 		this.isDesktop = isDesktop;
-		loader = new ResourceLoader();
+		loader = new ResourceLoader(this);
 	}
 	@Override
 	public void create() {
