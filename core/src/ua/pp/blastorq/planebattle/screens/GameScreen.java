@@ -23,12 +23,6 @@ class GameScreen implements Screen
         bullets = data.bullets;
         player = data.player;
         bot = data.bot;
-
-        player.setSize(64*data.scale, 64*data.scale);
-        player.setPosition((data.vw - player.getWidth()) / 2, 0);
-
-        bot.setSize(64*data.scale, 64*data.scale);
-        bot.setPosition((data.vw - bot.getWidth()) / 2, data.vh-160-(64*data.scale));
     }
     private void handleInput(){
         if (Gdx.input.isTouched()) {
@@ -69,10 +63,10 @@ class GameScreen implements Screen
     }
     @Override
     public void resize(int width, int height) {
-        MainMenuScreen.SCR_WIDTH = Gdx.graphics.getWidth();
-        MainMenuScreen.SCR_HEIGHT = Gdx.graphics.getHeight();
-        Gdx.app.log("", "" + MainMenuScreen.SCR_WIDTH);
-        Gdx.app.log("", "" + MainMenuScreen.SCR_HEIGHT);
+        data.vw = Gdx.graphics.getWidth();
+        data.vh = Gdx.graphics.getHeight();
+        Gdx.app.log("", "" + data.vw);
+        Gdx.app.log("", "" + data.vh);
     }
     @Override
     public void resume() {

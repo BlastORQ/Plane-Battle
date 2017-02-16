@@ -15,62 +15,63 @@ import ua.pp.blastorq.planebattle.Bill;
 import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.actors.Button;
 import ua.pp.blastorq.planebattle.actors.Cancel;
-import ua.pp.blastorq.planebattle.actors.Off;
+import ua.pp.blastorq.planebattle.actors.Mute;
 import ua.pp.blastorq.planebattle.actors.OffMusicButton;
-import ua.pp.blastorq.planebattle.actors.On;
+import ua.pp.blastorq.planebattle.actors.Unmute;
 import ua.pp.blastorq.planebattle.actors.StartButton;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
 import ua.pp.blastorq.planebattle.objects.MovingBackground;
 
 public class MainMenuScreen implements Screen, Bill {
-    static float SCR_WIDTH = Gdx.graphics.getWidth(), SCR_HEIGHT = Gdx.graphics.getHeight();
     private BitmapFont font;
     private MovingBackground frontBackground, backBackground;
     private MovHandler movHandler;
     private PlaneBattle pb;
-    private Texture PlayButton;
-    private Texture bg;
-    private Texture player;
+    private Texture t_bg, t_start, t_plane, t_unmute, t_btn, t_mute, t_noads;
     private SpriteBatch batch;
     private Stage stage;
     private StartButton startButton;
-    private Off off;
-    private On onb;
-    private Cancel cancel;
+    private Mute btn_mute;
+    private Unmute btn_unmute;
+    private Cancel btn_noads;
+    Viewport viewport;
+    OffMusicButton btn_bg_mute;
+    Button btn_bg_noads;
+
     public MainMenuScreen(PlaneBattle planeBattle){
         this.pb = planeBattle;
+
+        t_unmute = new Texture("unmute.png");
+        t_start = new Texture("start.png");
+        t_plane = new Texture("spacecraft.png");
+        t_btn = new Texture("btn.png");
+        t_bg = new Texture("bg.png");
+        t_mute = new Texture("mute.png");
+        t_noads = new Texture("no-ads.png");
+        font = new BitmapFont(Gdx.files.internal("font/font.fnt"));
+
         movHandler = new MovHandler(0, -20);
         frontBackground = movHandler.getFrontMovingBackground();
         backBackground = movHandler.getBackMovingBackground();
-        Texture on = new Texture("volume-control.png");
-        PlayButton = new Texture("start.png");
-        player = new Texture("Plane.png");
+
+        startButton = new StartButton(t_start, (data.vw / 2) - (t_start.getWidth() / 2), (data.vh / 2) - (t_start.getHeight() / 2) + 50, t_start.getWidth(), t_start.getHeight());
+
+        btn_bg_mute = new OffMusicButton(t_btn, startButton.getX(), startButton.getY() - 10 - t_btn.getHeight(), t_btn.getWidth(), t_btn.getHeight());
+        btn_mute = new Mute(t_mute, startButton.getX() + 10, startButton.getY() - 10 - t_btn.getHeight() + 5, t_mute.getWidth(), t_mute.getHeight());
+        btn_unmute = new Unmute(t_unmute, startButton.getX() + 10, startButton.getY() - 10 - t_btn.getHeight() + 5, t_mute.getWidth(), t_mute.getHeight());
+
+        btn_bg_noads = new Button(t_btn, btn_bg_mute.getX() + t_btn.getWidth() + 10, btn_bg_mute.getY(), t_btn.getWidth(), t_btn.getHeight());
+        btn_noads = new Cancel(t_noads, btn_bg_noads.getX(), btn_bg_noads.getY(), t_noads.getWidth(), t_noads.getHeight());
+
+        viewport = new StretchViewport(data.vw, data.vh);
         batch = new SpriteBatch();
-        bg = new Texture("bg.png");
-        Viewport viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport);
-        startButton = new StartButton(PlayButton, (SCR_WIDTH / 2) - (PlayButton.getWidth() / 2), (SCR_HEIGHT / 2) - (PlayButton.getHeight() / 2) + 50, PlayButton.getWidth(), PlayButton.getHeight());
-        Texture OffMusicButton = new Texture("btn.png");
-        OffMusicButton offMusicButton = new OffMusicButton(OffMusicButton, startButton.getX(), startButton.getY() - 10 - OffMusicButton.getHeight(), OffMusicButton.getWidth(), OffMusicButton.getHeight());
-        Texture CancelMusic = new Texture("volume-adjustment-mute.png");
-        off = new Off(CancelMusic, startButton.getX() + 10, startButton.getY() - 10 - OffMusicButton.getHeight() + 5, CancelMusic.getWidth(), CancelMusic.getHeight());
-        onb = new On(on, startButton.getX() + 10, startButton.getY() - 10 - OffMusicButton.getHeight() + 5, CancelMusic.getWidth(), CancelMusic.getHeight());
-        Button button = new Button(OffMusicButton, offMusicButton.getX() + OffMusicButton.getWidth() + 10, offMusicButton.getY(), OffMusicButton.getWidth(), OffMusicButton.getHeight());
-        Texture CancelImage = new Texture("no-ads-icon.png");
-        cancel = new Cancel(CancelImage, button.getX(), button.getY(), CancelImage.getWidth(), CancelImage.getHeight());
         stage.addActor(startButton);
-        stage.addActor(offMusicButton);
-        stage.addActor(off);
-        stage.addActor(button);
-        stage.addActor(cancel);
-        font = new BitmapFont(Gdx.files.internal("font/font.fnt"));
+        stage.addActor(btn_bg_mute);
+        stage.addActor(btn_mute);
+        stage.addActor(btn_bg_noads);
+        stage.addActor(btn_noads);
         Gdx.input.setInputProcessor(stage);
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-        float gameWidth = 136;
-        float gameHeight = screenHeight / (screenWidth / gameWidth);
-        SCR_WIDTH = gameWidth;
-        SCR_HEIGHT = gameHeight;
         Listener();
     }
     @Override
@@ -82,14 +83,14 @@ public class MainMenuScreen implements Screen, Bill {
     @Override
     public void render(float delta) {
         batch.begin();
-        batch.draw(bg, frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth() + 150, frontBackground.getHeight() + 150);
-        batch.draw(bg, backBackground.getX(), backBackground.getY(), backBackground.getWidth() + 150, backBackground.getHeight() + 150);
+        batch.draw(t_bg, frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth() + 150, frontBackground.getHeight() + 150);
+        batch.draw(t_bg, backBackground.getX(), backBackground.getY(), backBackground.getWidth() + 150, backBackground.getHeight() + 150);
         batch.end();
         stage.act(delta);
         stage.draw();
         batch.begin();
-        batch.draw(data.player, (SCR_WIDTH / 2) - (player.getWidth() / 2), 0);
-        font.draw(batch, "PLAY", (SCR_WIDTH / 2) - (PlayButton.getWidth() / 2) + 50, (SCR_HEIGHT / 2) - (PlayButton.getHeight() / 2) + 155);
+        data.player.draw(batch);
+        font.draw(batch, "PLAY", (data.vw / 2) - (t_start.getWidth() / 2) + 50, (data.vh / 2) - (t_start.getHeight() / 2) + 155);
         batch.end();
         movHandler.update(delta);
     }
@@ -107,7 +108,7 @@ public class MainMenuScreen implements Screen, Bill {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        off.addListener(new ClickListener() {
+        btn_mute.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -118,12 +119,12 @@ public class MainMenuScreen implements Screen, Bill {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 data.menuAudio.pause();
 
-                off.remove();
-                stage.addActor(onb);
+                btn_mute.remove();
+                stage.addActor(btn_unmute);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        onb.addListener(new ClickListener() {
+        btn_unmute.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                 return super.touchDown(event, x, y, pointer, button);
@@ -132,13 +133,13 @@ public class MainMenuScreen implements Screen, Bill {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                                 data.menuAudio.play();
-                                onb.remove();
-                                stage.addActor(off);
+                                btn_unmute.remove();
+                                stage.addActor(btn_mute);
                                 super.touchUp(event, x, y, pointer, button);
                             }
                         }
         );
-        cancel.addListener(new ClickListener() {
+        btn_noads.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             if (!pb.getDesktop()) {
@@ -153,8 +154,8 @@ public class MainMenuScreen implements Screen, Bill {
     }
     @Override
     public void resize(int width, int height) {
-        SCR_WIDTH = Gdx.graphics.getWidth();
-        SCR_HEIGHT = Gdx.graphics.getHeight();
+        data.vw = Gdx.graphics.getWidth();
+        data.vh = Gdx.graphics.getHeight();
     }
 
 

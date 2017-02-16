@@ -45,16 +45,21 @@ public class data {
         Gdx.input.setInputProcessor(stage);
 
         backgroundTexture = new Texture("bg.png");
-        playerShipTexture = new Texture("Plane.png");
-        bulletTexture = new Texture("bulletTexture.png");
-        menuAudio = Gdx.audio.newMusic(Gdx.files.internal("MenuMusic.ogg"));
+        playerShipTexture = new Texture("spacecraft.png");
+        bulletTexture = new Texture("bullet.png");
+        menuAudio = Gdx.audio.newMusic(Gdx.files.internal("menu.ogg"));
 
         movHandler = new MovHandler(0, -100);
         frontMovingBackground = movHandler.getFrontMovingBackground();
 
         player = new Plane(playerShipTexture, false);
-        player.flip(false, true);
+        player.setSize(64*scale, 64*scale);
+        player.setPosition((vw - player.getWidth()) / 2, 0);
+
         bot = new Plane(playerShipTexture, true);
+        bot.flip(false, true);
+        bot.setSize(64*scale, 64*scale);
+        bot.setPosition((vw - bot.getWidth()) / 2, vh-160-(64*scale));
         bullets = new Bullets();
 
         menuAudio.setLooping(true);
