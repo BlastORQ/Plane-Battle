@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Off extends Actor {
+public class Mute extends Actor {
     private Texture image;
     private float x, y, width, height;
 
-    public Off(Texture image, float x, float y, float width, float height) {
+    public Mute(Texture image, float x, float y, float width, float height) {
         this.image = image;
         this.x = x;
         this.y = y;
