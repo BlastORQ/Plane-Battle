@@ -32,8 +32,8 @@ public class SplashScreen implements Screen{
         Sprite logo = new Sprite(f);
         sprite = new Sprite(logo);
         sprite.setColor(1, 1, 0, 0);
-        sprite.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        sprite.setPosition(0 , 0);
+        sprite.setSize(768, 1280);
+        sprite.setPosition((data.vw-sprite.getWidth())/2, (data.vh-sprite.getHeight())/2);
         setupTween();
         batch = new SpriteBatch();
 
