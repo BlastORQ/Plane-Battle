@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "648489083336",
+    "firebase_url": "https://plane-fight-65232.firebaseio.com",
+    "project_id": "plane-fight-65232",
+    "storage_bucket": "plane-fight-65232.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648489083336:android:18c18bc1019596c3",
+        "android_client_info": {
+          "package_name": "ua.pp.blastorq.planebattle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "648489083336-k6veosfmdq3ac2bth0286blm8jfc25ij.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ua.pp.blastorq.planebattle",
+            "certificate_hash": "6D2FD7A535F70E26DD11296FE0DABA676F720274"
+          }
+        },
+        {
+          "client_id": "648489083336-a1avrjo9ln4bven9rtmug28vgfdc97bo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWyx2iHZopc2UjJKCwNWLeBKKZWFYFhsw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "648489083336-a1avrjo9ln4bven9rtmug28vgfdc97bo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
