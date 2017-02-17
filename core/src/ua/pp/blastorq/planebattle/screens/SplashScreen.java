@@ -12,6 +12,7 @@ import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import ua.pp.blastorq.planebattle.PlaneBattle;
+import ua.pp.blastorq.planebattle.loader.data;
 import ua.pp.blastorq.planebattle.tools.SpriteAccessor;
 public class SplashScreen implements Screen{
 
@@ -19,11 +20,8 @@ public class SplashScreen implements Screen{
     private SpriteBatch batch;
     private Sprite sprite;
     private PlaneBattle game;
-    private Screen nextScreen;
-    public SplashScreen(PlaneBattle game, Screen nextScreen) {
+    public SplashScreen(PlaneBattle game) {
         this.game = game;
-        this.nextScreen = nextScreen;
-
     }
 
     @Override
@@ -33,6 +31,7 @@ public class SplashScreen implements Screen{
         sprite = new Sprite(logo);
         sprite.setColor(1, 1, 0, 0);
         sprite.setSize(768, 1280);
+        sprite.setScale(1f * sprite.getHeight() / data.vh );
         sprite.setPosition((data.vw-sprite.getWidth())/2, (data.vh-sprite.getHeight())/2);
         setupTween();
         batch = new SpriteBatch();
@@ -47,7 +46,7 @@ public class SplashScreen implements Screen{
         TweenCallback callback = new TweenCallback() {
             @Override
             public void onEvent(int type, BaseTween<?> source) {
-                game.setScreen(nextScreen);
+                game.setScreen(new MainMenuScreen(game));
             }
         };
 
