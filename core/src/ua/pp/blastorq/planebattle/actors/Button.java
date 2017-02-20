@@ -15,7 +15,6 @@ public class Button extends Actor {
         this.width = width;
         this.height = height;
         setBounds(x, y, width, height);
-
     }
     @Override
     public float getX() {

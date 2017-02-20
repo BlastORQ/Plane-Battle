@@ -10,14 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import ua.pp.blastorq.planebattle.actors.Button;
 import ua.pp.blastorq.planebattle.loader.data;
 import ua.pp.blastorq.planebattle.Bill;
 import ua.pp.blastorq.planebattle.PlaneBattle;
-import ua.pp.blastorq.planebattle.actors.NoAds;
-import ua.pp.blastorq.planebattle.actors.Mute;
-import ua.pp.blastorq.planebattle.actors.OffMusicButton;
-import ua.pp.blastorq.planebattle.actors.Unmute;
-import ua.pp.blastorq.planebattle.actors.StartButton;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
 import ua.pp.blastorq.planebattle.objects.MovingBackground;
 
@@ -29,10 +26,7 @@ public class MainMenuScreen implements Screen, Bill {
     private Texture t_bg, t_unmute, t_mute, t_noads;
     private SpriteBatch batch;
     private Stage stage;
-    private StartButton btn_start_back, btn_start_front;
-    private Mute btn_mute;
-    private Unmute btn_unmute;
-    private NoAds btn_noads;
+    private Button btn_start_back, btn_start_front, btn_mute, btn_unmute, btn_noads;
     private float t_size;
     Viewport viewport;
     Texture t_btn_bg_back, t_btn_bg_front;
@@ -54,13 +48,13 @@ public class MainMenuScreen implements Screen, Bill {
         frontBackground = movHandler.getFrontMovingBackground();
         backBackground = movHandler.getBackMovingBackground();
 
-        btn_start_back = new StartButton(t_btn_bg_back, 64, data.vh/2, data.vw - 128, 128*data.scale);
-        btn_start_front = new StartButton(t_btn_bg_front, 64+8, data.vh/2 + 8, data.vw - 128 - 16, 128*data.scale - 16);
+        btn_start_back = new Button(t_btn_bg_back, 64, data.vh/2, data.vw - 128, 128*data.scale);
+        btn_start_front = new Button(t_btn_bg_front, 64+8, data.vh/2 + 8, data.vw - 128 - 16, 128*data.scale - 16);
 
-        btn_mute = new Mute(t_mute, 64, data.vh/2-t_size-16, t_size, t_size);
-        btn_unmute = new Unmute(t_unmute, 64, data.vh/2-t_size-16, t_size, t_size);
+        btn_mute = new Button(t_mute, 64, data.vh/2-t_size-16, t_size, t_size);
+        btn_unmute = new Button(t_unmute, 64, data.vh/2-t_size-16, t_size, t_size);
 
-        btn_noads = new NoAds(t_noads, 64+t_size+16, data.vh/2-t_size-16, t_size, t_size);
+        btn_noads = new Button(t_noads, 64+t_size+16, data.vh/2-t_size-16, t_size, t_size);
 
         viewport = new StretchViewport(data.vw, data.vh);
         batch = new SpriteBatch();

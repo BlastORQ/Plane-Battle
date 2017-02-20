@@ -9,6 +9,7 @@ import ua.pp.blastorq.planebattle.loader.data;
 public class Plane extends Sprite {
     private float acceleration = 0;
     private boolean isBot = false;
+    private float hp = 1;
     public boolean canShut;
 
     public Plane(Texture texture, boolean bot) {
@@ -24,7 +25,7 @@ public class Plane extends Sprite {
         }else if(data.bot.getX() < data.player.getX() && Math.random()<0.4){
             this.right();
         }
-        if(this.canShut && Math.random()<0.02){
+        if(this.canShut && Math.random()<0.01){
             this.shot();
         }
     }
@@ -44,6 +45,7 @@ public class Plane extends Sprite {
         Bullet bullet = new Bullet(
             this.getX() + 32,
             this.getY(),
+            (float)(Math.random()-0.5f)/15,
             this.isBot ? 1 : -1
         );
         data.bullets.append(bullet, this.isBot);
@@ -69,5 +71,20 @@ public class Plane extends Sprite {
     }
     public void render(){
         this.draw(data.batch);
+    }
+    float getHp(){return this.hp;}
+    void setHp(float h){
+        if(h<0){
+            this.hp = 0;
+            data.game.gameOver(this.isBot);
+        }else if (h>1){
+            this.hp = 1;
+        }else{
+            this.hp = h;
+        }
+    }
+    public void reset(){
+        this.hp = 1;
+        this.canShut = !this.isBot;
     }
 }

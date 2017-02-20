@@ -9,20 +9,23 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.objects.MovingBackground;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
 import ua.pp.blastorq.planebattle.sprite.Bullets;
+import ua.pp.blastorq.planebattle.sprite.HP;
 import ua.pp.blastorq.planebattle.sprite.Plane;
 
 
 public class data {
-    private static Texture backgroundTexture, bulletTexture, playerShipTexture;
+    private static Texture backgroundTexture, bulletTexture, playerShipTexture, myHPtexture, enemyHPtexture;
     private static MovingBackground frontMovingBackground;
 
     public static Music menuAudio;
     public static OrthographicCamera camera = new OrthographicCamera();
     public static MovHandler movHandler;
     public static Plane player, bot;
+    public static HP myHP, enemyHP;
     public static SpriteBatch batch;
     public static Stage stage;
     public static Bullets bullets;
@@ -33,8 +36,10 @@ public class data {
     public static MovingBackground getFrontMovingBackground(){return frontMovingBackground;}
     public static Texture getBackgroundTexture(){return backgroundTexture;}
     public static Texture getBulletTexture(){ return bulletTexture;}
+    public static PlaneBattle game;
 
-    public void load(){
+    public void load(PlaneBattle game){
+        this.game = game;
         vw = Gdx.graphics.getWidth();
         vh = Gdx.graphics.getHeight();
         scale = vw/320;
@@ -47,6 +52,8 @@ public class data {
         backgroundTexture = new Texture("bg.png");
         playerShipTexture = new Texture("spacecraft.png");
         bulletTexture = new Texture("bullet.png");
+        myHPtexture = new Texture("hp_my.png");
+        enemyHPtexture = new Texture("hp_enemy.png");
         menuAudio = Gdx.audio.newMusic(Gdx.files.internal("menu.ogg"));
 
         movHandler = new MovHandler(0, -100);
@@ -61,6 +68,16 @@ public class data {
         bot.setSize(64*scale, 64*scale);
         bot.setPosition((vw - bot.getWidth()) / 2, vh-160-(64*scale));
         bullets = new Bullets();
+
+        myHP = new HP(myHPtexture, player, false);
+        myHP.setSize(vw/2 - 64, 24*scale);
+        myHP.setStartWidth(vw/2 - 64);
+        myHP.setPosition(32, vh - 64);
+
+        enemyHP = new HP(enemyHPtexture, bot, true);
+        enemyHP.setSize(vw/2 - 64, 24*scale);
+        enemyHP.setStartWidth(vw/2 - 64);
+        enemyHP.setPosition(vw/2 + 32, vh - 64);
 
         menuAudio.setLooping(true);
     }

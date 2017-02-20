@@ -7,22 +7,26 @@ import ua.pp.blastorq.planebattle.loader.data;
 import ua.pp.blastorq.planebattle.objects.MovingBackground;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
 import ua.pp.blastorq.planebattle.sprite.Bullets;
+import ua.pp.blastorq.planebattle.sprite.HP;
 import ua.pp.blastorq.planebattle.sprite.Plane;
 
-class GameScreen implements Screen
+public class GameScreen implements Screen
 {
     private Plane bot, player;
     private Bullets bullets;
     private MovingBackground frontMovingBackground, backMovingBackground;
     private MovHandler movHandler;
+    public static HP myHP, enemyHP;
 
-    GameScreen() {
+    public GameScreen() {
         movHandler = new MovHandler(0, -100);
         frontMovingBackground = movHandler.getFrontMovingBackground();
         backMovingBackground = movHandler.getBackMovingBackground();
         bullets = data.bullets;
         player = data.player;
         bot = data.bot;
+        myHP = data.myHP;
+        enemyHP = data.enemyHP;
     }
     private void handleInput(){
         if (Gdx.input.isTouched()) {
@@ -44,12 +48,16 @@ class GameScreen implements Screen
         handleInput();
         player.calculate(delta);
         bot.calculate(delta);
+        myHP.calculate();
+        enemyHP.calculate();
         movHandler.update(delta);
         data.batch.begin();
         data.batch.draw(data.getBackgroundTexture(), data.getFrontMovingBackground().getX(), frontMovingBackground.getY(), frontMovingBackground.getWidth(), frontMovingBackground.getHeight());
         data.batch.draw(data.getBackgroundTexture(), backMovingBackground.getX(), backMovingBackground.getY(), backMovingBackground.getWidth(), backMovingBackground.getHeight());
         bullets.render();
         player.render();
+        myHP.render();
+        enemyHP.render();
         bot.render();
         data.batch.end();
     }
@@ -79,5 +87,4 @@ class GameScreen implements Screen
     public void dispose() {
 
     }
-
 }

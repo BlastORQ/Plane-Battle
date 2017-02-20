@@ -2,6 +2,7 @@ package ua.pp.blastorq.planebattle;
 
 import com.badlogic.gdx.Game;
 import ua.pp.blastorq.planebattle.loader.data;
+import ua.pp.blastorq.planebattle.screens.MainMenuScreen;
 import ua.pp.blastorq.planebattle.screens.SplashScreen;
 
 public class PlaneBattle extends Game {
@@ -21,10 +22,15 @@ public class PlaneBattle extends Game {
 	}
 	@Override
 	public void create() {
-			loader.load();
-			this.setScreen(new SplashScreen(this));
-		}
-
+		loader.load(this);
+		this.setScreen(new SplashScreen(this));
+	}
+	public void gameOver(boolean bot){
+		this.setScreen(new MainMenuScreen(this));
+		data.player.reset();
+		data.bot.reset();
+		data.bullets.reset();
+	}
 	@Override
 	public void render() {
 		super.render();
