@@ -16,7 +16,7 @@ public class GameScreen implements Screen
     private Bullets bullets;
     private MovingBackground frontMovingBackground, backMovingBackground;
     private MovHandler movHandler;
-    public static HP myHP, enemyHP;
+    public static HP playerHP, botHP;
 
     public GameScreen() {
         movHandler = new MovHandler(0, -100);
@@ -25,8 +25,8 @@ public class GameScreen implements Screen
         bullets = data.bullets;
         player = data.player;
         bot = data.bot;
-        myHP = data.myHP;
-        enemyHP = data.enemyHP;
+        playerHP = data.playerHP;
+        botHP = data.botHP;
     }
     private void handleInput(){
         if (Gdx.input.isTouched()) {
@@ -48,16 +48,16 @@ public class GameScreen implements Screen
         handleInput();
         player.calculate(delta);
         bot.calculate(delta);
-        myHP.calculate();
-        enemyHP.calculate();
+        playerHP.calculate();
+        botHP.calculate();
         movHandler.update(delta);
         data.batch.begin();
         data.batch.draw(data.getBackgroundTexture(), data.getFrontMovingBackground().getX(), frontMovingBackground.getY(), frontMovingBackground.getWidth(), frontMovingBackground.getHeight());
         data.batch.draw(data.getBackgroundTexture(), backMovingBackground.getX(), backMovingBackground.getY(), backMovingBackground.getWidth(), backMovingBackground.getHeight());
         bullets.render();
         player.render();
-        myHP.render();
-        enemyHP.render();
+        playerHP.render();
+        botHP.render();
         bot.render();
         data.batch.end();
     }

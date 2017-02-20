@@ -18,14 +18,14 @@ import ua.pp.blastorq.planebattle.sprite.Plane;
 
 
 public class data {
-    private static Texture backgroundTexture, bulletTexture, playerShipTexture, myHPtexture, enemyHPtexture;
+    private static Texture backgroundTexture, bulletTexture, playerShipTexture, playerHPtexture, botHPtexture;
     private static MovingBackground frontMovingBackground;
 
     public static Music menuAudio;
     public static OrthographicCamera camera = new OrthographicCamera();
     public static MovHandler movHandler;
     public static Plane player, bot;
-    public static HP myHP, enemyHP;
+    public static HP playerHP, botHP;
     public static SpriteBatch batch;
     public static Stage stage;
     public static Bullets bullets;
@@ -52,8 +52,8 @@ public class data {
         backgroundTexture = new Texture("bg.png");
         playerShipTexture = new Texture("spacecraft.png");
         bulletTexture = new Texture("bullet.png");
-        myHPtexture = new Texture("hp_my.png");
-        enemyHPtexture = new Texture("hp_enemy.png");
+        playerHPtexture = new Texture("hp_player.png");
+        botHPtexture = new Texture("hp_bot.png");
         menuAudio = Gdx.audio.newMusic(Gdx.files.internal("menu.ogg"));
 
         movHandler = new MovHandler(0, -100);
@@ -69,15 +69,15 @@ public class data {
         bot.setPosition((vw - bot.getWidth()) / 2, vh-160-(64*scale));
         bullets = new Bullets();
 
-        myHP = new HP(myHPtexture, player, false);
-        myHP.setSize(vw/2 - 64, 24*scale);
-        myHP.setStartWidth(vw/2 - 64);
-        myHP.setPosition(32, vh - 64);
+        playerHP = new HP(playerHPtexture, player, false);
+        playerHP.setSize(vw/2 - 64, 24*scale);
+        playerHP.setStartWidth(vw/2 - 64);
+        playerHP.setPosition(32, vh - 64);
 
-        enemyHP = new HP(enemyHPtexture, bot, true);
-        enemyHP.setSize(vw/2 - 64, 24*scale);
-        enemyHP.setStartWidth(vw/2 - 64);
-        enemyHP.setPosition(vw/2 + 32, vh - 64);
+        botHP = new HP(botHPtexture, bot, true);
+        botHP.setSize(vw/2 - 64, 24*scale);
+        botHP.setStartWidth(vw/2 - 64);
+        botHP.setPosition(vw/2 + 32, vh - 64);
 
         menuAudio.setLooping(true);
     }
