@@ -1,6 +1,7 @@
 package ua.pp.blastorq.planebattle.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -69,7 +70,19 @@ public class MainMenuScreen implements Screen, Bill {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        data.menuAudio.play();
+        Preferences prefs = Gdx.app.getPreferences("soundSettings");
+        if(!prefs.contains("enabled")){
+            prefs.putBoolean("enabled", true);
+        }
+        prefs.flush();
+        if(prefs.getBoolean("enabled")) {
+            data.menuAudio.play();
+            btn_unmute.remove();
+            stage.addActor(btn_mute);
+        }else{
+            btn_mute.remove();
+            stage.addActor(btn_unmute);
+        }
     }
 
     @Override
@@ -98,6 +111,7 @@ public class MainMenuScreen implements Screen, Bill {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 pb.setScreen(new GameScreen());
                 data.menuAudio.stop();
+
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -111,7 +125,9 @@ public class MainMenuScreen implements Screen, Bill {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 data.menuAudio.pause();
-
+                Preferences preferences = Gdx.app.getPreferences("soundSettings");
+                preferences.putBoolean("enabled", false);
+                preferences.flush();
                 btn_mute.remove();
                 stage.addActor(btn_unmute);
                 super.touchUp(event, x, y, pointer, button);
@@ -126,6 +142,9 @@ public class MainMenuScreen implements Screen, Bill {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                                 data.menuAudio.play();
+                                Preferences preferences = Gdx.app.getPreferences("soundSettings");
+                                preferences.putBoolean("enabled", true);
+                                preferences.flush();
                                 btn_unmute.remove();
                                 stage.addActor(btn_mute);
                                 super.touchUp(event, x, y, pointer, button);
