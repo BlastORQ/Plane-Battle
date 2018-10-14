@@ -26,7 +26,7 @@ public class Bullets extends Array<Bullet> {
             }
         }
     }
-    void onOverlap(boolean isBot){
+    private void onOverlap(boolean isBot){
         if(isBot){
             data.bot.setHp(data.bot.getHp()-0.02f);
             if(Math.random()<0.2){

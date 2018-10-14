@@ -77,8 +77,6 @@ public class MainMenuScreen implements Screen, Bill {
         batch.begin();
         batch.draw(t_bg, frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth() + 150, frontBackground.getHeight() + 150);
         batch.draw(t_bg, backBackground.getX(), backBackground.getY(), backBackground.getWidth() + 150, backBackground.getHeight() + 150);
-        data.player.draw(batch);
-        data.bot.draw(batch);
         batch.end();
 
         stage.act(delta);

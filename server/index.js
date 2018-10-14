@@ -13,8 +13,8 @@ io.on('connection', function(socket){
 	playercount += 1;
 	console.log("" + playercount);
 	socket.on('CountPlayers',function(){
-      playercount +=1;
-                             	console.log("" + playercount);
+      			playercount +=1;
+                console.log("" + playercount);
            });
 	socket.emit('socketID', { id: socket.id });
 	socket.emit('getPlayers', players);

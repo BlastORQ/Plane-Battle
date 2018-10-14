@@ -1,6 +1,8 @@
 package ua.pp.blastorq.planebattle.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 
 import ua.pp.blastorq.planebattle.loader.data;
@@ -10,7 +12,7 @@ import ua.pp.blastorq.planebattle.sprite.Bullets;
 import ua.pp.blastorq.planebattle.sprite.HP;
 import ua.pp.blastorq.planebattle.sprite.Plane;
 
-public class GameScreen implements Screen
+public class GameScreen implements Screen, InputProcessor
 {
     private Plane bot, player;
     private Bullets bullets;
@@ -66,7 +68,8 @@ public class GameScreen implements Screen
     }
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(data.stage);
+        Gdx.input.setInputProcessor(this);
+        Gdx.input.setCatchBackKey(true);
         data.menuAudio.stop();
     }
     @Override
@@ -76,15 +79,64 @@ public class GameScreen implements Screen
         Gdx.app.log("", "" + data.vw);
         Gdx.app.log("", "" + data.vh);
     }
+
+
     @Override
     public void resume() {
     }
+
     @Override
     public void hide() {
 
     }
+
     @Override
     public void dispose() {
 
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        if(keycode == Input.Keys.BACK){
+            data.game.setScreen(new MainMenuScreen(data.game));
+            return false;
+        }
+        Gdx.app.log("keyUp", "smth - " + keycode);
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }

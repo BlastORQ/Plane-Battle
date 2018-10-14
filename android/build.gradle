@@ -19,7 +19,7 @@ android {
     }
     defaultConfig {
         applicationId "ua.pp.blastorq.planebattle"
-        minSdkVersion 9
+        minSdkVersion 21
         targetSdkVersion 24
     }
 }

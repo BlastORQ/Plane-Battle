@@ -7,6 +7,12 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
+
+    }
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
     }
 }
 
@@ -35,7 +41,7 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java"
-
+    apply plugin: 'idea'
 
     dependencies {
         compile project(":core")
@@ -81,7 +87,9 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdxpay:gdx-pay-client:$gdxPayVersion"
+        compile "io.socket:socket.io-client:0.6.2"
         compile fileTree(dir: '../libs', include: '*.jar')
+        compile fileTree(include: ['*.jar'], dir: 'libs')
     }
 }
 tasks.eclipse.doLast {
