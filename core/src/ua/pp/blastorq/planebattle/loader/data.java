@@ -66,18 +66,18 @@ public class data {
         bot = new Plane(playerShipTexture, true);
         bot.flip(false, true);
         bot.setSize(64*scale, 64*scale);
-        bot.setPosition((vw - bot.getWidth()) / 2, vh-160-(64*scale));
+        bot.setPosition((vw - bot.getWidth()) / 2, vh-400-(64*scale));
         bullets = new Bullets();
 
         playerHP = new HP(playerHPtexture, player, false);
         playerHP.setSize(vw/2 - 64, 24*scale);
         playerHP.setStartWidth(vw/2 - 64);
-        playerHP.setPosition(32, vh - 64);
+        playerHP.setPosition(32, vh - 256);
 
         botHP = new HP(botHPtexture, bot, true);
         botHP.setSize(vw/2 - 64, 24*scale);
         botHP.setStartWidth(vw/2 - 64);
-        botHP.setPosition(vw/2 + 32, vh - 64);
+        botHP.setPosition(vw/2 + 32, vh - 256);
 
         menuAudio.setLooping(true);
     }

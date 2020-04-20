@@ -111,11 +111,8 @@ public class AndroidLauncher extends AndroidApplication implements Bill {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == 1001) {
 			if (resultCode == RESULT_OK) {
-
-
+				data.getExtras();
 				Toast.makeText(this, "Thanks for purchasing", Toast.LENGTH_LONG).show();
-
-
 			}
 		}
 	}

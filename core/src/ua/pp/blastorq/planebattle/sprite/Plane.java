@@ -20,9 +20,9 @@ public class Plane extends Sprite {
     }
 
     private void _calculateBot(){
-        if(data.bot.getX() > data.player.getX() && Math.random()<0.4){
+        if(data.bot.getX() > data.player.getX() && Math.random()<0.6){
             this.left();
-        }else if(data.bot.getX() < data.player.getX() && Math.random()<0.4){
+        }else if(data.bot.getX() < data.player.getX() && Math.random()<0.6){
             this.right();
         }
         if(this.canShut && Math.random()<0.01){
