@@ -22,57 +22,57 @@ import ua.pp.blastorq.planebattle.objects.MovingBackground;
 
 public class MainMenuScreen implements Screen, Bill {
     private BitmapFont font;
-    OrthographicCamera camera;
+    private OrthographicCamera camera;
     private MovingBackground frontBackground, backBackground;
     private MovHandler movHandler;
     private PlaneBattle pb;
-    private Texture t_bg, t_unmute, t_mute, t_noads, t_share;
+    private Texture backgroundTexture;
     private SpriteBatch batch;
     private Stage stage;
-    private Button btn_start_back, btn_start_front, btn_mute, btn_unmute, btn_noads, btn_share;
-    private float t_size;
-    Viewport viewport;
-    Texture t_btn_bg_back, t_btn_bg_front;
+    private Button startButtonForeground;
+    private Button buttonMute;
+    private Button buttonUnmute;
+    private Button btnDisableAds;
 
     public MainMenuScreen(PlaneBattle planeBattle){
         this.pb = planeBattle;
 
-        t_unmute = new Texture("t_unmute.png");
-        t_bg = new Texture("bg.png");
-        t_mute = new Texture("t_mute.png");
-        t_noads = new Texture("t_no-ads.png");
-        t_share = new Texture("t_share.png");
-        t_btn_bg_back = new Texture("t_btn_gb_back.png");
-        t_btn_bg_front = new Texture("t_btn_gb_front.png");
+        Texture unmuteTexture = new Texture("unmuteTexture.png");
+        backgroundTexture = new Texture("bg.png");
+        Texture muteTexture = new Texture("muteTexture.png");
+        Texture disableAdsTexture = new Texture("disableAdsTexture.png");
+        Texture shareTexture = new Texture("shareTexture.png");
+        Texture buttonBackgroundTexture = new Texture("buttonBackgroundTexture.png");
+        Texture buttonForegroundTexture = new Texture("buttonForegroundTexture.png");
         font = new BitmapFont(Gdx.files.internal("font/font.fnt"));
         Gdx.app.log("SCALE", String.valueOf(data.scale));
         font.getData().setScale(2.0f, 2.0f);
-        t_size = t_mute.getHeight()*data.scale;
+        float sizeOfTexture = muteTexture.getHeight() * data.scale;
 
         movHandler = new MovHandler(0, -20);
         frontBackground = movHandler.getFrontMovingBackground();
         backBackground = movHandler.getBackMovingBackground();
 
-        btn_start_back = new Button(t_btn_bg_back, 64, data.vh/2f, data.vw - 128, 128*data.scale);
-        btn_start_front = new Button(t_btn_bg_front, btn_start_back.getX()+8, btn_start_back.getY() + 8, data.vw - 128 - 16, 128*data.scale - 16);
+        Button startButtonBackground = new Button(buttonBackgroundTexture, 64, data.vh / 2f, data.vw - 128, 128 * data.scale);
+        startButtonForeground = new Button(buttonForegroundTexture, startButtonBackground.getX()+8, startButtonBackground.getY() + 8, data.vw - 128 - 16, 128*data.scale - 16);
 
-        btn_mute = new Button(t_mute, btn_start_back.getX(), btn_start_back.getY()-t_size-16, t_size, t_size);
-        btn_unmute = new Button(t_unmute, btn_mute.getX(), btn_mute.getY(), t_size, t_size);
+        buttonMute = new Button(muteTexture, startButtonBackground.getX(), startButtonBackground.getY()- sizeOfTexture -16, sizeOfTexture, sizeOfTexture);
+        buttonUnmute = new Button(unmuteTexture, buttonMute.getX(), buttonMute.getY(), sizeOfTexture, sizeOfTexture);
 
-        btn_noads = new Button(t_noads, btn_mute.getX()+btn_mute.getWidth() + (btn_start_back.getWidth()/8), btn_mute.getY(), t_size, t_size);
+        btnDisableAds = new Button(disableAdsTexture, buttonMute.getX()+ buttonMute.getWidth() + (startButtonBackground.getWidth()/8), buttonMute.getY(), sizeOfTexture, sizeOfTexture);
 
-        btn_share = new Button(t_share, btn_noads.getX()+btn_noads.getWidth() + (btn_start_back.getWidth()/8), btn_noads.getY(), t_size, t_size);
+        Button buttonShare = new Button(shareTexture, btnDisableAds.getX() + btnDisableAds.getWidth() + (startButtonBackground.getWidth() / 8), btnDisableAds.getY(), sizeOfTexture, sizeOfTexture);
 
-        viewport = new StretchViewport(data.vw, data.vh);
+        Viewport viewport = new StretchViewport(data.vw, data.vh);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, data.vw, data.vh);
         batch = new SpriteBatch();
         stage = new Stage(viewport);
-        stage.addActor(btn_start_back);
-        stage.addActor(btn_start_front);
-        stage.addActor(btn_mute);
-        stage.addActor(btn_noads);
-        stage.addActor(btn_share);
+        stage.addActor(startButtonBackground);
+        stage.addActor(startButtonForeground);
+        stage.addActor(buttonMute);
+        stage.addActor(btnDisableAds);
+        stage.addActor(buttonShare);
         Gdx.input.setInputProcessor(stage);
         initListeners();
     }
@@ -86,11 +86,11 @@ public class MainMenuScreen implements Screen, Bill {
         prefs.flush();
         if(prefs.getBoolean("enabled")) {
             data.menuAudio.play();
-            btn_unmute.remove();
-            stage.addActor(btn_mute);
+            buttonUnmute.remove();
+            stage.addActor(buttonMute);
         }else{
-            btn_mute.remove();
-            stage.addActor(btn_unmute);
+            buttonMute.remove();
+            stage.addActor(buttonUnmute);
         }
     }
 
@@ -101,21 +101,21 @@ public class MainMenuScreen implements Screen, Bill {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(t_bg, frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth() + 150, frontBackground.getHeight() + 150);
-        batch.draw(t_bg, backBackground.getX(), backBackground.getY(), backBackground.getWidth() + 150, backBackground.getHeight() + 150);
+        batch.draw(backgroundTexture, frontBackground.getX(), frontBackground.getY(), frontBackground.getWidth() + 150, frontBackground.getHeight() + 150);
+        batch.draw(backgroundTexture, backBackground.getX(), backBackground.getY(), backBackground.getWidth() + 150, backBackground.getHeight() + 150);
         batch.end();
 
         stage.act(delta);
         stage.draw();
 
         batch.begin();
-        font.draw(batch, "PLAY", btn_start_front.getX() + (btn_start_front.getWidth()/3) ,btn_start_front.getY() + (btn_start_front.getHeight()/1.5f));
+        font.draw(batch, "PLAY", startButtonForeground.getX() + (startButtonForeground.getWidth()/3) , startButtonForeground.getY() + (startButtonForeground.getHeight()/1.5f));
         batch.end();
 
         movHandler.update(delta);
     }
     private void initListeners() {
-        btn_start_front.addListener(new ClickListener() {
+        startButtonForeground.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return super.touchDown(event, x, y, pointer, button);
@@ -129,7 +129,7 @@ public class MainMenuScreen implements Screen, Bill {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        btn_mute.addListener(new ClickListener() {
+        buttonMute.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -142,12 +142,12 @@ public class MainMenuScreen implements Screen, Bill {
                 Preferences preferences = Gdx.app.getPreferences("soundSettings");
                 preferences.putBoolean("enabled", false);
                 preferences.flush();
-                btn_mute.remove();
-                stage.addActor(btn_unmute);
+                buttonMute.remove();
+                stage.addActor(buttonUnmute);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        btn_unmute.addListener(new ClickListener() {
+        buttonUnmute.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                 return super.touchDown(event, x, y, pointer, button);
@@ -159,13 +159,13 @@ public class MainMenuScreen implements Screen, Bill {
                                 Preferences preferences = Gdx.app.getPreferences("soundSettings");
                                 preferences.putBoolean("enabled", true);
                                 preferences.flush();
-                                btn_unmute.remove();
-                                stage.addActor(btn_mute);
+                                buttonUnmute.remove();
+                                stage.addActor(buttonMute);
                                 super.touchUp(event, x, y, pointer, button);
                             }
                         }
         );
-        btn_noads.addListener(new ClickListener() {
+        btnDisableAds.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             if (!pb.getDesktop()) {
