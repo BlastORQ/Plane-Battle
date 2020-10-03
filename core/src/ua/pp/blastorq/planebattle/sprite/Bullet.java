@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Bullet extends Rectangle {
     private float directionX = 0, directionY = 0;
-    private boolean bot = false;
+    private boolean bot;
     Bullet(float x, float y, float dirX, float dirY){
         this.x = x;
         this.y = y;

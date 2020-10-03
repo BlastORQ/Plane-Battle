@@ -1,4 +1,4 @@
-package ua.pp.blastorq.planebattle.screens.managers;
+package ua.pp.blastorq.planebattle.screens.mainscreen.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

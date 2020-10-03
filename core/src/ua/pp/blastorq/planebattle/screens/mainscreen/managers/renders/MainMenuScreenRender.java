@@ -1,4 +1,4 @@
-package ua.pp.blastorq.planebattle.screens.renders;
+package ua.pp.blastorq.planebattle.screens.mainscreen.managers.renders;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -14,7 +14,7 @@ import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.actors.Button;
 import ua.pp.blastorq.planebattle.loader.data;
 import ua.pp.blastorq.planebattle.objects.MovingBackground;
-import ua.pp.blastorq.planebattle.screens.managers.MainMenuScreenObjectsManager;
+import ua.pp.blastorq.planebattle.screens.mainscreen.managers.MainMenuScreenObjectsManager;
 
 import static ua.pp.blastorq.planebattle.loader.data.camera;
 

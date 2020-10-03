@@ -1,4 +1,4 @@
-package ua.pp.blastorq.planebattle.screens.listeners.impl;
+package ua.pp.blastorq.planebattle.screens.mainscreen.listeners.impl;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

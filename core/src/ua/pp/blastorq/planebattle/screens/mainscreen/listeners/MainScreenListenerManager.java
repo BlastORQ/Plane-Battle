@@ -1,14 +1,14 @@
-package ua.pp.blastorq.planebattle.screens.listeners;
+package ua.pp.blastorq.planebattle.screens.mainscreen.listeners;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import ua.pp.blastorq.planebattle.PlaneBattle;
 import ua.pp.blastorq.planebattle.actors.Button;
-import ua.pp.blastorq.planebattle.screens.listeners.impl.ButtonDisableAdsListener;
-import ua.pp.blastorq.planebattle.screens.listeners.impl.ButtonMuteListener;
-import ua.pp.blastorq.planebattle.screens.listeners.impl.ButtonUnmuteListener;
-import ua.pp.blastorq.planebattle.screens.listeners.impl.StartButtonForegroundListener;
-import ua.pp.blastorq.planebattle.screens.managers.MainMenuScreenObjectsManager;
+import ua.pp.blastorq.planebattle.screens.mainscreen.listeners.impl.ButtonDisableAdsListener;
+import ua.pp.blastorq.planebattle.screens.mainscreen.listeners.impl.ButtonMuteListener;
+import ua.pp.blastorq.planebattle.screens.mainscreen.listeners.impl.ButtonUnmuteListener;
+import ua.pp.blastorq.planebattle.screens.mainscreen.listeners.impl.StartButtonForegroundListener;
+import ua.pp.blastorq.planebattle.screens.mainscreen.managers.MainMenuScreenObjectsManager;
 
 public class MainScreenListenerManager {
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import ua.pp.blastorq.planebattle.loader.data;
 import ua.pp.blastorq.planebattle.objects.MovingBackground;
 import ua.pp.blastorq.planebattle.objects.MovHandler;
+import ua.pp.blastorq.planebattle.screens.mainscreen.MainMenuScreen;
 import ua.pp.blastorq.planebattle.sprite.Bullets;
 import ua.pp.blastorq.planebattle.sprite.HP;
 import ua.pp.blastorq.planebattle.sprite.Plane;
@@ -33,8 +34,8 @@ public class GameScreen implements Screen, InputProcessor
     private void handleInput(){
         if (Gdx.input.isTouched()) {
             data.touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            data.camera.unproject(data.touchPos);
-            float touchX = (data.touchPos.x + 1) / 2 * data.vw;
+
+            float touchX = (data.touchPos.x + 1) / 2;// * data.vw;
             if(touchX < data.vw/3){
                 player.left();
             }else if(touchX < data.vw*2/3){

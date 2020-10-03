@@ -1,4 +1,4 @@
-package ua.pp.blastorq.planebattle.screens.listeners.impl;
+package ua.pp.blastorq.planebattle.screens.mainscreen.listeners.impl;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -9,12 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import ua.pp.blastorq.planebattle.actors.Button;
 import ua.pp.blastorq.planebattle.loader.data;
 
-public class ButtonMuteListener extends ClickListener {
+public class ButtonUnmuteListener extends ClickListener {
 
     private final Button buttonMute, buttonUnmute;
     private final Stage stage;
 
-    public ButtonMuteListener(Button buttonMute, Button buttonUnmute, Stage stage) {
+    public ButtonUnmuteListener(Button buttonMute, Button buttonUnmute, Stage stage) {
         this.buttonMute = buttonMute;
         this.buttonUnmute = buttonUnmute;
         this.stage = stage;
@@ -22,12 +22,12 @@ public class ButtonMuteListener extends ClickListener {
 
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        data.menuAudio.pause();
+        data.menuAudio.play();
         Preferences preferences = Gdx.app.getPreferences("soundSettings");
-        preferences.putBoolean("enabled", false);
+        preferences.putBoolean("enabled", true);
         preferences.flush();
-        buttonMute.remove();
-        stage.addActor(buttonUnmute);
+        buttonUnmute.remove();
+        stage.addActor(buttonMute);
         super.touchUp(event, x, y, pointer, button);
     }
 }

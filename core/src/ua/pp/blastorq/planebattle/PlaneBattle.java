@@ -2,7 +2,7 @@ package ua.pp.blastorq.planebattle;
 
 import com.badlogic.gdx.Game;
 import ua.pp.blastorq.planebattle.loader.data;
-import ua.pp.blastorq.planebattle.screens.MainMenuScreen;
+import ua.pp.blastorq.planebattle.screens.mainscreen.MainMenuScreen;
 import ua.pp.blastorq.planebattle.screens.SplashScreen;
 
 public class PlaneBattle extends Game {

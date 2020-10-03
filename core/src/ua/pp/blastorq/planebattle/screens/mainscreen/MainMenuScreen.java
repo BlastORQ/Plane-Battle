@@ -1,13 +1,13 @@
-package ua.pp.blastorq.planebattle.screens;
+package ua.pp.blastorq.planebattle.screens.mainscreen;
 
 import com.badlogic.gdx.Screen;
 
 import ua.pp.blastorq.planebattle.Bill;
 import ua.pp.blastorq.planebattle.PlaneBattle;
-import ua.pp.blastorq.planebattle.screens.listeners.MainScreenListenerManager;
-import ua.pp.blastorq.planebattle.screens.managers.MainMenuScreenObjectsManager;
-import ua.pp.blastorq.planebattle.screens.renders.MainMenuScreenRender;
-import ua.pp.blastorq.planebattle.screens.renders.Renderer;
+import ua.pp.blastorq.planebattle.screens.mainscreen.listeners.MainScreenListenerManager;
+import ua.pp.blastorq.planebattle.screens.mainscreen.managers.MainMenuScreenObjectsManager;
+import ua.pp.blastorq.planebattle.screens.mainscreen.managers.renders.MainMenuScreenRender;
+import ua.pp.blastorq.planebattle.screens.mainscreen.managers.renders.Renderer;
 
 public class MainMenuScreen implements Screen, Bill {
 

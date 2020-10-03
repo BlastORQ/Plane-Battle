@@ -1,4 +1,4 @@
-package ua.pp.blastorq.planebattle.screens.renders;
+package ua.pp.blastorq.planebattle.screens.mainscreen.managers.renders;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
